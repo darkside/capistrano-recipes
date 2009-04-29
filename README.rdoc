@@ -1,0 +1,7 @@
+= capistrano-recipes
+
+Description goes here.
+
+== Copyright
+
+Copyright (c) 2009 philm. See LICENSE for details.
