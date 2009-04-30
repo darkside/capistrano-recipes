@@ -1,7 +1,6 @@
 require 'capistrano'
 require 'capistrano/cli'
 require 'capistrano/ext/multistage'
-require 'yaml'
 require 'helpers'
 
 @@cap_config = Capistrano::Configuration.respond_to?(:instance) ? 
