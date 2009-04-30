@@ -3,7 +3,7 @@
     
     desc "Restart Rails app running under Phusion Passenger by touching restart.txt"
     task :bounce, :roles => :app do
-      run "touch #{current_path}/tmp/restart.txt"
+      run "#{sudo} touch #{current_path}/tmp/restart.txt"
     end
 
     desc "Inspect Phusion Passenger's memory usage. Assumes binaries are located in /opt/ruby-enterprise."
