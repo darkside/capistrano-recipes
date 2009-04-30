@@ -1,4 +1,4 @@
-= capistrano-recipes
+=Capistrano Recipes
 
 Useful Capistrano recipes including:
 
@@ -7,29 +7,31 @@ Useful Capistrano recipes including:
 * Log rotation and tailing commands
 * Restart and profile Phusion Passenger application server
 
+==Installation
+
 Easy as pie...
 
-1. Ensure you have the Capistrano and Capistrano extensions gems installed:
+# Ensure you have the Capistrano and Capistrano extensions gems installed:
 
   sudo gem install capistrano
   sudo gem install capistrano-ext
 
-2. Install this gem:
+# Install this gem:
 
   sudo gem install webficient-capistrano-recipes --source=http://gems.github.com
 
-3. To setup the initial Capistrano deploy file, go to your Rails app folder via command line and enter:
+# To setup the initial Capistrano deploy file, go to your Rails app folder via command line and enter:
 
   capify .
   
-4. Inside the newly created config/deploy.rb, add:
+# Inside the newly created config/deploy.rb, add:
 
 require 'capistrano_recipes'
 
-5. If you're running Phusion Passenger (http://www.modrails.com) be sure you add this line to config/deploy.rb:
+# If you're running Phusion Passenger (http://www.modrails.com) be sure you add this line to config/deploy.rb:
 
   set :server, :passenger
   
-== Copyright
+==Copyright
 
 Copyright (c) 2009 Webficient LLC, Phil Misiowiec. See LICENSE for details.
