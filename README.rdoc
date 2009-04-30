@@ -1,7 +1,35 @@
 = capistrano-recipes
 
-Description goes here.
+Useful Capistrano recipes including:
 
+* Create MySQL database and user on server (via prompts)
+* Create standalone copy of database.yaml in shared path (via prompts)
+* Log rotation and tailing commands
+* Restart and profile Phusion Passenger application server
+
+Easy as pie...
+
+1. Ensure you have the Capistrano and Capistrano extensions gems installed:
+
+  sudo gem install capistrano
+  sudo gem install capistrano-ext
+
+2. Install this gem:
+
+  sudo gem install webficient-capistrano-recipes --source=http://gems.github.com
+
+3. To setup the initial Capistrano deploy file, go to your Rails app folder via command line and enter:
+
+  capify .
+  
+4. Inside the newly created config/deploy.rb, add:
+
+require 'capistrano_recipes'
+
+5. If you're running Phusion Passenger (http://www.modrails.com) be sure you add this line to config/deploy.rb:
+
+  set :server, :passenger
+  
 == Copyright
 
-Copyright (c) 2009 philm. See LICENSE for details.
+Copyright (c) 2009 Webficient LLC, Phil Misiowiec. See LICENSE for details.

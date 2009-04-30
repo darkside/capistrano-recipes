@@ -7,8 +7,10 @@ begin
     gem.name = "capistrano-recipes"
     gem.summary = %Q{Capistrano recipes}
     gem.email = "phil@webficient.com"
-    gem.homepage = "http://github.com/philm/capistrano-recipes"
-    gem.authors = ["philm"]
+    gem.homepage = "http://github.com/webficient/capistrano-recipes"
+    gem.authors = ["Phil Misiowiec"]
+    gem.add_dependency('capistrano', ['>= 2.5.5'])
+    gem.add_dependency('capistrano-ext', ['>= 1.2.1'])
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
@@ -23,26 +25,3 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
-
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/*_test.rb'
-  test.verbose = false
-end
-
-begin
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |test|
-    test.libs << 'test'
-    test.pattern = 'test/**/*_test.rb'
-    test.verbose = true
-  end
-rescue LoadError
-  task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
-  end
-end
-
-
-task :default => :test
