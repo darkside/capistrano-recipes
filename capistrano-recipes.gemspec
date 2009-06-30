@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{capistrano-recipes}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Phil Misiowiec"]
-  s.date = %q{2009-04-30}
+  s.date = %q{2009-06-29}
   s.email = %q{phil@webficient.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
     "lib/recipes/db.rb",
     "lib/recipes/deploy.rb",
     "lib/recipes/log.rb",
-    "lib/recipes/passenger.rb"
+    "lib/recipes/passenger.rb",
+    "lib/recipes/symlink.rb"
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/webficient/capistrano-recipes}
