@@ -1,13 +1,7 @@
 require 'erb'
 
 @@cap_config.load do
-  
-  before "deploy:setup" do
-    db.create_yaml if Capistrano::CLI.ui.agree("Would you like to create a custom database.yml on the server?")  
-  end
-  
-  after "deploy:update_code", "db:symlink"
-  
+    
   namespace :db do
     namespace :mysql do
       desc "Create MySQL database and user for this environment using prompted values"
@@ -48,7 +42,6 @@ require 'erb'
         <<: *base
       EOF
 
-      run "#{sudo} mkdir -p #{shared_path}/config; #{sudo} chmod 775 #{shared_path}/config"
       put db_config.result, "#{shared_path}/config/database.yml"
     end
       

@@ -1,4 +1,13 @@
 @@cap_config.load do
+  
+  set :shared_children, %w(system log pids config)
+  
+  after "deploy:setup" do
+    db.create_yaml if Capistrano::CLI.ui.agree("Create database.yml in app's shared path?")  
+  end
+  
+  after "deploy:update_code", "db:symlink"
+  
   namespace :deploy do
     
     desc <<-DESC
