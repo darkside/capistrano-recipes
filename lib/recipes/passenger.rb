@@ -1,4 +1,4 @@
-@@cap_config.load do
+Capistrano::Configuration.instance(:must_exist).load do
   namespace :passenger do
     
     desc "Restart Rails app running under Phusion Passenger by touching restart.txt"

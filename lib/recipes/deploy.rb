@@ -1,5 +1,4 @@
-@@cap_config.load do
-  
+Capistrano::Configuration.instance(:must_exist).load do
   set :shared_children, %w(system log pids config)
   
   after "deploy:setup" do

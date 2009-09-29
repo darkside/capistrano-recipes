@@ -1,4 +1,4 @@
-@@cap_config.load do
+Capistrano::Configuration.instance(:must_exist).load do
   namespace :symlink do
     
     desc <<-DESC

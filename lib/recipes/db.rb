@@ -1,7 +1,6 @@
 require 'erb'
 
-@@cap_config.load do
-    
+Capistrano::Configuration.instance(:must_exist).load do
   namespace :db do
     namespace :mysql do
       desc "Create MySQL database and user for this environment using prompted values"

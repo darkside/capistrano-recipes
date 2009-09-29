@@ -6,10 +6,11 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "capistrano-recipes"
     gem.summary = %Q{Capistrano recipes}
+    gem.description = 'Extend the Capistrano gem with these useful recipes'
     gem.email = "phil@webficient.com"
     gem.homepage = "http://github.com/webficient/capistrano-recipes"
     gem.authors = ["Phil Misiowiec"]
-    gem.add_dependency('capistrano', ['>= 2.5.5'])
+    gem.add_dependency('capistrano', ['>= 2.5.9'])
     gem.add_dependency('capistrano-ext', ['>= 1.2.1'])
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

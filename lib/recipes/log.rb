@@ -1,4 +1,4 @@
-@@cap_config.load do
+Capistrano::Configuration.instance(:must_exist).load do
   namespace :log do
     
     desc "Tail application log file for the specified environment, e.g. cap staging log:tail"
