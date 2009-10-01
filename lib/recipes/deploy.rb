@@ -5,10 +5,9 @@ Capistrano::Configuration.instance(:must_exist).load do
     db.create_yaml if Capistrano::CLI.ui.agree("Create database.yml in app's shared path?")  
   end
   
-  after "deploy:update_code", "db:symlink"
+  after "deploy:update_code", "symlink:shared_config_files"
   
   namespace :deploy do
-    
     desc <<-DESC
       Restarts your application. If you are running Phusion Passenger, you can \
       explicitly set the server type:
@@ -33,6 +32,5 @@ Capistrano::Configuration.instance(:must_exist).load do
         try_runner "#{current_path}/script/process/reaper"
       end
     end
-    
   end
 end
