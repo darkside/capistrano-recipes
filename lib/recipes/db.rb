@@ -23,8 +23,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     desc "Create database.yml in shared path with settings for current stage and test env"
     task :create_yaml do      
-      set(:db_user) { Capistrano::CLI.ui.ask "Enter #{stage} database username:" }
-      set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{stage} database password:" }
+      set(:db_user) { Capistrano::CLI.ui.ask "Enter #{environment} database username:" }
+      set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{environment} database password:" }
       
       db_config = ERB.new <<-EOF
       base: &base
@@ -32,8 +32,8 @@ Capistrano::Configuration.instance(:must_exist).load do
         username: #{db_user}
         password: #{db_pass}
 
-      #{stage}:
-        database: #{application}_#{stage}
+      #{environment}:
+        database: #{application}_#{environment}
         <<: *base
 
       test:
@@ -43,17 +43,12 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       put db_config.result, "#{shared_path}/config/database.yml"
     end
-      
-    desc "Create symlink for database yaml stored in shared path" 
-    task :symlink do
-      run "#{sudo} ln -nfs #{shared_path}/config/database.yml #{current_release}/config/database.yml" 
-    end
   end
     
   def prepare_for_db_command
-    set :db_name, "#{application}_#{stage}"
+    set :db_name, "#{application}_#{environment}"
     set(:db_admin_user) { Capistrano::CLI.ui.ask "Username with priviledged database access (to create db):" }
-    set(:db_user) { Capistrano::CLI.ui.ask "Enter #{stage} database username:" }
-    set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{stage} database password:" }
+    set(:db_user) { Capistrano::CLI.ui.ask "Enter #{environment} database username:" }
+    set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{environment} database password:" }
   end
 end
