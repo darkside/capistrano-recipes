@@ -5,14 +5,17 @@ Capistrano::Configuration.instance(:must_exist).load do
   
   namespace :symlink do
     desc <<-DESC
-    Create shared directories
+    Create shared directories. Specify which directories are shared via:
+      set :shared_dirs, %w(avatars videos)
     DESC
     task :create_shared_dirs, :roles => :app do
       shared_dirs.each { |link| run "mkdir -p #{shared_path}/#{link}" } if shared_dirs
     end
     
     desc <<-DESC
-    Create links to shared directories from current deployment's public directory
+    Create links to shared directories from current deployment's public directory.
+    Specify which directories are shared via:
+      set :shared_dirs, %w(avatars videos)
     DESC
     task :shared_directories, :roles => :app do
       shared_dirs.each do |link| 
@@ -22,7 +25,9 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     
     desc <<-DESC
-    Create links to config files stored in shared config directory
+    Create links to config files stored in shared config directory.
+    Specify which config files to link using the following:
+      set :config_files, 'database.yml'
     DESC
     task :shared_config_files, :roles => :app do
       config_files.each do |file_path|

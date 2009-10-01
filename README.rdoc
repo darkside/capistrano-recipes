@@ -7,18 +7,34 @@ Useful Capistrano recipes including:
 * Log rotation and tailing commands
 * Restart and profile Phusion Passenger application server
 
+==Included Tasks
+
+* cap db:create_yaml
+* cap db:mysql:setup
+* cap log:rotate
+* cap log:tail
+* cap passenger:bounce
+* cap passenger:memory
+* cap passenger:status
+* cap symlink:create_shared_dirs
+* cap symlink:shared_config_files
+* cap symlink:shared_directories
+
 ==Installation
 
 Easy as pie...
 
-Ensure you have the Capistrano and Capistrano extensions gems installed:
+Ensure you have the Capistrano gem installed:
 
   sudo gem install capistrano
+
+Optionally install the Capistrano extensions gem to give you multistage support:
+  
   sudo gem install capistrano-ext
 
 Install this gem:
 
-  sudo gem install webficient-capistrano-recipes --source=http://gems.github.com
+  sudo gem install capistrano-recipes --source=http://gemcutter.com
 
 To setup the initial Capistrano deploy file, go to your Rails app folder via command line and enter:
 
@@ -27,6 +43,7 @@ To setup the initial Capistrano deploy file, go to your Rails app folder via com
 Inside the newly created config/deploy.rb, add:
 
   require 'capistrano_recipes'
+  require 'capistrano/ext/multistage' # only require if you've installed Cap ext gem
 
 If you're running Phusion Passenger (http://www.modrails.com) be sure you add this line to config/deploy.rb:
 
