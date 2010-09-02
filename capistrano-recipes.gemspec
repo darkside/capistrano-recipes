@@ -28,12 +28,14 @@ Gem::Specification.new do |s|
      "lib/capistrano_recipes.rb",
      "lib/helpers.rb",
      "lib/recipes/application.rb",
+     "lib/recipes/bundler.rb",
      "lib/recipes/db.rb",
      "lib/recipes/deploy.rb",
+     "lib/recipes/hooks.rb",
      "lib/recipes/log.rb",
      "lib/recipes/nginx.rb",
      "lib/recipes/passenger.rb",
-     "lib/recipes/symlink.rb",
+     "lib/recipes/symlinks.rb",
      "lib/recipes/unicorn.rb"
   ]
   s.homepage = %q{http://github.com/webficient/capistrano-recipes}
