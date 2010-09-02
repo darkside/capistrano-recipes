@@ -3,6 +3,57 @@ require 'erb'
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :db do
     namespace :mysql do
+    
+      # Sets database variables from remote database.yaml
+      def prepare_from_yaml
+        set(:db_file) { "#{application}-dump.sql.bz2" }
+        set(:db_remote_file) { "#{shared_path}/backup/#{db_file}" }
+        set(:db_local_file)  { "tmp/#{db_file}" }
+        set(:db_user) { db_config[rails_env]["username"] }
+        set(:db_pass) { db_config[rails_env]["password"] }
+        set(:db_host) { db_config[rails_env]["host"] }
+        set(:db_name) { db_config[rails_env]["database"] }
+      end
+        
+      def db_config
+        @db_config ||= fetch_db_config
+      end
+
+      def fetch_db_config
+        require 'yaml'
+        file = capture "cat #{shared_path}/config/database.yml"
+        db_config = YAML.load(file)
+      end
+
+      desc <<-EOF
+      Performs a compressed database dump. \
+      WARNING: This locks your tables for the duration of the mysqldump.
+      Don't run it madly!
+      EOF
+      task :dump, :roles => :db, :only => { :primary => true } do
+        prepare_from_yaml
+        run "mysqldump --user=#{db_user} -p --host=#{db_host} #{db_name} | bzip2 -z9 > #{db_remote_file}" do |ch, stream, out|
+        ch.send_data "#{db_pass}\n" if out =~ /^Enter password:/
+          puts out
+        end
+      end
+
+      desc "Restores the database from the latest compressed dump"
+      task :restore, :roles => :db, :only => { :primary => true } do
+        prepare_from_yaml
+        run "bzcat #{db_remote_file} | mysql --user=#{db_user} -p --host=#{db_host} #{db_name}" do |ch, stream, out|
+        ch.send_data "#{db_pass}\n" if out =~ /^Enter password:/
+          puts out
+        end
+      end
+
+      desc "Downloads the compressed database dump to this machine"
+      task :fetch_dump, :roles => :db, :only => { :primary => true } do
+        prepare_from_yaml
+        download db_remote_file, db_local_file, :via => :scp
+      end
+    
+    
       desc "Create MySQL database and user for this environment using prompted values"
       task :setup, :roles => :db, :only => { :primary => true } do
         prepare_for_db_command
