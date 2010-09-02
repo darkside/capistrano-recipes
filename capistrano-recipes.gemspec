@@ -23,14 +23,16 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION.yml",
      "capistrano-recipes.gemspec",
+     "generators/nginx.conf.erb",
      "generators/unicorn.rb.erb",
      "lib/capistrano_recipes.rb",
      "lib/helpers.rb",
+     "lib/recipes/application.rb",
      "lib/recipes/db.rb",
      "lib/recipes/deploy.rb",
      "lib/recipes/log.rb",
+     "lib/recipes/nginx.rb",
      "lib/recipes/passenger.rb",
-     "lib/recipes/settings.rb",
      "lib/recipes/symlink.rb",
      "lib/recipes/unicorn.rb"
   ]
