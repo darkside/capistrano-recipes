@@ -74,7 +74,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     up the unicorn. Usually god does that.
     EOF
     task :setup do
-      generate_config(unicorn_local_config,unicorn_remote_config)
+      puts templates_path
     end
   end
   

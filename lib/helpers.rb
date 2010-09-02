@@ -16,6 +16,10 @@ def environment
   end
 end
 
+def templates_path
+  File.join(File.dirname(__FILE__,'../generators'))
+end
+
 # Execute a rake task, example:
 #   run_rake log:clear
 def run_rake(task)
