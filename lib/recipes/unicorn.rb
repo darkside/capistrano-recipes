@@ -1,5 +1,3 @@
-# Unicorn settings
-#------------------------------------------------------------------------------
 Capistrano::Configuration.instance(:must_exist).load do
   # Number of workers (Rule of thumb is 2 per CPU)
   # Just be aware that every worker needs to cache all classes and thus eat some
