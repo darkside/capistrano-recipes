@@ -46,11 +46,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<capistrano>, [">= 2.5.9"])
+      s.add_runtime_dependency(%q<capistrano-ext>, [">= 1.2.1"])
     else
       s.add_dependency(%q<capistrano>, [">= 2.5.9"])
+      s.add_dependency(%q<capistrano-ext>, [">= 1.2.1"])
     end
   else
     s.add_dependency(%q<capistrano>, [">= 2.5.9"])
+    s.add_dependency(%q<capistrano-ext>, [">= 1.2.1"])
   end
 end
 

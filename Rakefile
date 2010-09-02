@@ -11,6 +11,7 @@ begin
     gem.homepage = "http://github.com/webficient/capistrano-recipes"
     gem.authors = ["Phil Misiowiec"]
     gem.add_dependency('capistrano', ['>= 2.5.9'])
+    gem.add_dependency('capistrano-ext', ['>= 1.2.1'])
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
