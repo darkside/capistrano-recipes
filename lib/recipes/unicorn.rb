@@ -33,7 +33,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Our unicorn template to be parsed by erb
   # You may need to generate this file the first time with the generator
   # included in the gem
-  set(:unicorn_local_config) {"#{templates_path}/unicorn.rb.erb"} 
+  set(:unicorn_local_config) { File.join(templates_path, "unicorn.rb.erb") } 
 
   # The remote location of unicorn's config file. Used by god to fire it up
   set(:unicorn_remote_config) { "#{shared_path}/config/unicorn.rb" }
@@ -70,11 +70,11 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     desc <<-EOF
     Parses the configuration file through ERB to fetch our variables and \
-    uploads the result to the server, to be loaded by whoever is booting \
-    up the unicorn. Usually god does that.
+    uploads the result to #{unicorn_remote_config}, to be loaded by whoever is booting \
+    up the unicorn.
     EOF
     task :setup do
-      puts templates_path
+      generate_config(unicorn_local_config,unicorn_remote_config)
     end
   end
   

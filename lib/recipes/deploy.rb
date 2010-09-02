@@ -26,8 +26,13 @@ Capistrano::Configuration.instance(:must_exist).load do
         set :use_sudo, false
     DESC
     task :restart, :roles => :app, :except => { :no_release => true } do
-      if exists?(:server) && fetch(:server).to_s.downcase == 'passenger'
-        passenger.bounce
+      if exists?(:server)
+        case fetch(:server).to_s.downcase
+          when 'passenger'
+            passenger.bounce
+          when 'unicorn'
+            unicorn.restart
+        end
       else
         try_runner "#{current_path}/script/process/reaper"
       end
