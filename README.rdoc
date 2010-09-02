@@ -17,6 +17,11 @@ Useful Capistrano recipes including:
 * cap passenger:bounce
 * cap passenger:memory
 * cap passenger:status
+* cap nginx:setup
+* cap nginx:start
+* cap nginx:stop
+* cap nginx:restart
+* cap nginx:status
 * cap unicorn:start
 * cap unicorn:stop
 * cap unicorn:restart

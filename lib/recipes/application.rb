@@ -9,6 +9,15 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :server, :unicorn unless exists?(:server)
   set :runner, user     unless exists?(:runner)
   
+  # The port to listen to, normally we default to 80
+  set :application_port, 80 unless exists?(:application_port)
+  
+  # Are we using ssl as well? Used by generators to configure a ssl host
+  set :application_uses_ssl, true unless exists?(:application_uses_ssl)
+  
+  # The port to listen to https requests, usually 443
+  set :application_port_ssl, 443 unless exists?(:application_port_ssl)
+  
   # Database settings
   set :database, :mysql unless exists?(:database)
   
@@ -25,6 +34,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Git settings for capistrano
   default_run_options[:pty] = true 
   ssh_options[:forward_agent] = true
+  
   
   # Daemons settings
   # The unix socket that unicorn will be attached to.
