@@ -36,4 +36,13 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Just to be safe, put the pid somewhere that survives deploys. shared/pids is
   # a good choice as any.
   set(:pids_path) { File.join(shared_path, "pids") } unless exists?(:pids_path)
+  
+  namespace :app do
+    task :setup, :roles => :app do
+      commands = shared_dirs.map do |path|
+        "if [ ! -d '#{path}' ]; then mkdir -p #{path}; fi;"
+      end
+      run "cd #{shared_path}; #{commands.join(' ')}"
+    end
+  end
 end

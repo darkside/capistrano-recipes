@@ -21,9 +21,7 @@ Useful Capistrano recipes including:
 * cap unicorn:stop
 * cap unicorn:restart
 * cap unicorn:setup
-* cap symlink:create_shared_dirs
-* cap symlink:shared_config_files
-* cap symlink:shared_directories
+* cap symlinks:make
 
 ==Installation
 
