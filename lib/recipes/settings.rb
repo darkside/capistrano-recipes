@@ -25,4 +25,16 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Git settings for capistrano
   default_run_options[:pty] = true 
   ssh_options[:forward_agent] = true
+  
+  # Multistage settings
+  # Try to set some good defaults, like development/staging/production
+  # Remember you still need the files in config/deploy/[stage].rb 
+  set :default_stage,  'staging'                  unless exists?(:default_stage)
+  set :stages, %w(development staging production) unless exists?(:stages)
+  
+  begin
+    require 'capistrano/ext/multistage'
+  rescue Exception => e
+    puts "Capistrano multistage extension not available\n See: #{e}"
+  end
 end
