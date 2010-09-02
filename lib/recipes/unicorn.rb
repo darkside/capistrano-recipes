@@ -17,17 +17,11 @@ Capistrano::Configuration.instance(:must_exist).load do
   # This is necessary if you're using rvm
   set :unicorn_bin, 'unicorn_rails' unless exists?(:unicorn_bin)
   
-  # The unix socket that unicorn will be attached to.
-  # Also, nginx will upstream to this guy.
-  # The *nix place for socks is /var/run, so we should probably put it there
-  # Make sure the runner can access this though.
-  set :sockets_path, "/var/run/#{application}" unless exists?(:sockets_path)
+
   set :unicorn_socket, File.join(sockets_path,'unicorn.sock') unless exists?(:unicorn_socket)
 
-  # Just to be safe, put the pid somewhere that survives deploys. tmp/pids is
-  # a good choice as any.
-  set(:pids_path) { "#{shared_path}/tmp/pids"}    unless exists?(:pids_path)
-  set(:unicorn_pid) { "#{pids_path}/unicorn.pid"} unless exists?(:unicorn_pid)
+  # Defines where the unicorn pid will live.
+  set(:unicorn_pid) { File.join(pids_path, "unicorn.pid") } unless exists?(:unicorn_pid)
 
 
   # Our unicorn template to be parsed by erb
@@ -39,7 +33,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set(:unicorn_remote_config) { "#{shared_path}/config/unicorn.rb" }
 
   def unicorn_start_cmd
-    "#{unicorn_bin} -c #{unicorn_remote_config} -E #{rails_env} -D"
+    "cd #{current_path} && #{unicorn_bin} -c #{unicorn_remote_config} -E #{rails_env} -D"
   end
   
   def unicorn_stop_cmd
@@ -65,7 +59,9 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     desc "Restart unicorn"    
     task :restart, :roles => :app do    
-      run unicorn_restart_cmd
+      run unicorn_restart_cmd do |ch, stream, out|
+        
+      end
     end
     
     desc <<-EOF
@@ -74,6 +70,9 @@ Capistrano::Configuration.instance(:must_exist).load do
     up the unicorn.
     EOF
     task :setup do
+      # TODO: refactor this to a more generic setup task once we have more socket tasks.
+      sudo "mkdir -p #{sockets_path}" 
+      sudo "chown #{user}:#{group} #{sockets_path} -R"
       generate_config(unicorn_local_config,unicorn_remote_config)
     end
   end
