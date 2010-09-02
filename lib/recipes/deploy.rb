@@ -9,12 +9,19 @@ Capistrano::Configuration.instance(:must_exist).load do
   
   namespace :deploy do
     desc <<-DESC
-      Restarts your application. If you are running Phusion Passenger, you can \
-      explicitly set the server type:
+      Restarts your application. This depends heavily on what server you're running. 
+      If you are running Phusion Passenger, you can explicitly set the server type:
       
         set :server, :passenger
-      
+          
       ...which will touch tmp/restart.txt, a file monitored by Passenger.
+
+      If you are running Unicorn, you can set:
+      
+        set :server, :unicorn
+      
+      ...which will use unicorn signals for restarting its workers.
+
       Otherwise, this command will call the script/process/reaper \
       script under the current path.
 

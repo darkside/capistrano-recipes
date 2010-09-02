@@ -6,6 +6,7 @@ Useful Capistrano recipes including:
 * Create standalone copy of database.yml in shared path (via prompts)
 * Log rotation and tailing commands
 * Restart and profile Phusion Passenger application server
+* Configure, start/stop/restart Unicorn application server
 
 ==Included Tasks
 
@@ -16,6 +17,10 @@ Useful Capistrano recipes including:
 * cap passenger:bounce
 * cap passenger:memory
 * cap passenger:status
+* cap unicorn:start
+* cap unicorn:stop
+* cap unicorn:restart
+* cap unicorn:setup
 * cap symlink:create_shared_dirs
 * cap symlink:shared_config_files
 * cap symlink:shared_directories
@@ -40,14 +45,24 @@ To setup the initial Capistrano deploy file, go to your Rails app folder via com
 
   capify .
 
+==Configuration
+
 Inside the newly created config/deploy.rb, add:
 
   require 'capistrano_recipes'
   require 'capistrano/ext/multistage' # only require if you've installed Cap ext gem
 
+===Passenger
+
 If you're running Phusion Passenger (http://www.modrails.com) be sure you add this line to config/deploy.rb:
 
   set :server, :passenger
+
+===Unicorn
+  
+If you're running Unicorn (http://unicorn.bogomips.org/) be sure to add this line instead:
+  
+  set :server, :unicorn
   
 ==Copyright
 
