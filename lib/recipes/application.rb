@@ -6,8 +6,9 @@ Capistrano::Configuration.instance(:must_exist).load do
   
   
   # Server settings
-  set :server, :unicorn unless exists?(:server)
-  set :runner, user     unless exists?(:runner)
+  set :server, :unicorn   unless exists?(:server)
+  set :web_server, :nginx unless exists?(:web_server)
+  set :runner, user       unless exists?(:runner)
   
   # The port to listen to, normally we default to 80
   set :application_port, 80 unless exists?(:application_port)
@@ -35,6 +36,10 @@ Capistrano::Configuration.instance(:must_exist).load do
   default_run_options[:pty] = true 
   ssh_options[:forward_agent] = true
   
+  # RVM settings
+  set :using_rvm, true unless exists?(:using_rvm)
+  # Sets the rvm to a specific version (or whatever env you want it to run in)
+  set :rvm_ruby_string, 'ree' unless exists?(:rvm_ruby_string)  
   
   # Daemons settings
   # The unix socket that unicorn will be attached to.
@@ -46,6 +51,9 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Just to be safe, put the pid somewhere that survives deploys. shared/pids is
   # a good choice as any.
   set(:pids_path) { File.join(shared_path, "pids") } unless exists?(:pids_path)
+  
+  # Application settings  
+  set :shared_dirs, %w( config uploads backup bundle tmp ) unless exists?(:shared_dirs)
   
   namespace :app do
     task :setup, :roles => :app do

@@ -1,3 +1,4 @@
+# Common hooks for all scenarios.
 Capistrano::Configuration.instance(:must_exist).load do
   after 'deploy:setup' do
     app.setup

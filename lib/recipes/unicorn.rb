@@ -77,5 +77,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
   end
   
+  after 'deploy:setup', 'unicorn:setup' if is_using_unicorn
+  
 end
 

@@ -47,6 +47,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     
   end
+  
+  after 'deploy:setup', 'nginx:setup' if is_using_nginx
     
 end
 

@@ -16,6 +16,18 @@ def environment
   end
 end
 
+def is_using_nginx
+  is_using('nginx',:web_server)
+end
+
+def is_using_unicorn
+  is_using('unicorn',:server)
+end
+
+def is_using(something, with_some_var)
+ exists?(with_some_var.to_sym) && fetch(with_some_var.to_sym).to_s.downcase == something
+end
+
 # Path to where the generators live
 def templates_path
   path = File.join(File.dirname(__FILE__),'../generators')
