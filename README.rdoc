@@ -55,6 +55,12 @@ Inside the newly created config/deploy.rb, add:
   require 'capistrano_recipes'
   require 'capistrano/ext/multistage' # only require if you've installed Cap ext gem
 
+===Nginx
+
+  If you're using nginx as your web server, set :web_server to :nginx and deploy:setup will
+  generate the appropriate configuration file for it based on your other variables, such as
+  :application_uses_ssl, etc.
+
 ===Passenger
 
 If you're running Phusion Passenger (http://www.modrails.com) be sure you add this line to config/deploy.rb:
