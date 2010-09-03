@@ -14,6 +14,7 @@ begin
     gem.add_dependency('capistrano-ext', ['>= 1.2.1'])
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
@@ -26,3 +27,4 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
