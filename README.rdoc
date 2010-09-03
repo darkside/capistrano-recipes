@@ -55,11 +55,22 @@ Inside the newly created config/deploy.rb, add:
   require 'capistrano_recipes'
   require 'capistrano/ext/multistage' # only require if you've installed Cap ext gem
 
+===RVM
+
+RVM is enabled by default. You can disable it by setting :using_rvm to false, or leverage it
+by setting your rvm_ruby_string to appropriate ones (default is ree)
+
+If using_rvm is true, the rvm recipe will load rvm's own capistrano extensions so you don't
+have to worry about it during deploy. Just make sure you have everything set up right, like
+.rvmrc on project root and system-wide install on the servers.
+
+See (http://rvm.beginrescueend.com/rvm/install) for more info.
+
 ===Nginx
 
-  If you're using nginx as your web server, set :web_server to :nginx and deploy:setup will
-  generate the appropriate configuration file for it based on your other variables, such as
-  :application_uses_ssl, etc.
+If you're using nginx as your web server, set :web_server to :nginx and deploy:setup will
+generate the appropriate configuration file for it based on your other variables, such as
+:application_uses_ssl, etc.
 
 ===Passenger
 

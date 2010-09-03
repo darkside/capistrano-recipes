@@ -23,6 +23,10 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       Otherwise, this command will call the script/process/reaper \
       script under the current path.
+      
+      If you are running with Unicorn, you can set the server type as well:
+      
+      set :server, :unicorn
 
       By default, this will be invoked via sudo as the `app' user. If \
       you wish to run it as a different user, set the :runner variable to \

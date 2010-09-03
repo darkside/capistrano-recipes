@@ -8,10 +8,10 @@ Gem::Specification.new do |s|
   s.version = "0.5.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Phil Misiowiec"]
+  s.authors = ["Phil Misiowiec", "Leonardo Bighetti"]
   s.date = %q{2010-09-03}
   s.description = %q{Extend the Capistrano gem with these useful recipes}
-  s.email = %q{phil@webficient.com}
+  s.email = %q{leonardobighetti@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
@@ -35,10 +35,11 @@ Gem::Specification.new do |s|
      "lib/recipes/log.rb",
      "lib/recipes/nginx.rb",
      "lib/recipes/passenger.rb",
+     "lib/recipes/rvm.rb",
      "lib/recipes/symlinks.rb",
      "lib/recipes/unicorn.rb"
   ]
-  s.homepage = %q{http://github.com/webficient/capistrano-recipes}
+  s.homepage = %q{http://github.com/darkside/capistrano-recipes}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
@@ -50,11 +51,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<capistrano>, [">= 2.5.9"])
+      s.add_runtime_dependency(%q<capistrano-ext>, [">= 1.2.1"])
     else
       s.add_dependency(%q<capistrano>, [">= 2.5.9"])
+      s.add_dependency(%q<capistrano-ext>, [">= 1.2.1"])
     end
   else
     s.add_dependency(%q<capistrano>, [">= 2.5.9"])
+    s.add_dependency(%q<capistrano-ext>, [">= 1.2.1"])
   end
 end
 
