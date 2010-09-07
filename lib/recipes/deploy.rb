@@ -41,10 +41,10 @@ Capistrano::Configuration.instance(:must_exist).load do
           when 'passenger'
             passenger.bounce
           when 'unicorn'
-            unicorn.restart
+            is_using_god ? god.restart_unicorn : unicorn.restart
         end
       else
-        try_runner "#{current_path}/script/process/reaper"
+        puts "Dunno how to restart your internets! kthx!"
       end
     end
   end

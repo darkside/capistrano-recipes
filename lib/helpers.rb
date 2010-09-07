@@ -24,14 +24,26 @@ def is_using_unicorn
   is_using('unicorn',:server)
 end
 
+def is_using_god
+  is_using('god',:monitorer)
+end
+
 def is_using(something, with_some_var)
  exists?(with_some_var.to_sym) && fetch(with_some_var.to_sym).to_s.downcase == something
 end
 
 # Path to where the generators live
 def templates_path
-  path = File.join(File.dirname(__FILE__),'../generators')
-  File.expand_path(path)
+  expanded_path_for('../generators')
+end
+
+def docs_path
+  expanded_path_for('../doc')
+end
+
+def expanded_path_for(path)
+  e = File.join(File.dirname(__FILE__),path)
+  File.expand_path(e)
 end
 
 def parse_config(file)

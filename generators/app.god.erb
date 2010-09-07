@@ -1,0 +1,25 @@
+app_name            = '<%= application %>'
+rails_root          = '<%= deploy_to %>/current'
+unicorn_bin         = '<%= unicorn_bin %>'
+unicorn_pid         = '<%= unicorn_pid %>'
+unicorn_config      = '<%= unicorn_remote_config %>'
+unicorn_start_cmd   = '<%= unicorn_start_cmd %>'
+unicorn_stop_cmd    = '<%= unicorn_stop_cmd %>'
+unicorn_restart_cmd = '<%= unicorn_restart_cmd %>'
+
+# Unicorn
+God.watch do |w|
+  unicorn(w, rails_root, 
+    :memory_limit => 100.megabytes, 
+    :cpu_limit    => 50.percent,
+    :bin_unicorn  => unicorn_bin,
+    :name         => app_name,
+    :rails_root   => rails_root,
+    :unicorn_conf => unicorn_config,
+    :unicorn_pid  => unicorn_pid,
+    :start_cmd    => unicorn_start_cmd,
+    :stop_cmd     => unicorn_stop_cmd,
+    :restart_cmd  => unicorn_restart_cmd,
+    :user         => '<%= unicorn_user %>',
+    :group        => '<%= unicorn_group %>')
+end

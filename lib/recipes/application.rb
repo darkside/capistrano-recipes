@@ -52,6 +52,8 @@ Capistrano::Configuration.instance(:must_exist).load do
   # a good choice as any.
   set(:pids_path) { File.join(shared_path, "pids") } unless exists?(:pids_path)
   
+  set :monitorer, 'god' unless exists?(:monitorer)
+  
   # Application settings  
   set :shared_dirs, %w( config uploads backup bundle tmp ) unless exists?(:shared_dirs)
   
