@@ -1,8 +1,8 @@
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :log do
-    desc "Tail application log file for the specified environment, e.g. cap staging log:tail"
+    desc "Tail all application log files"
     task :tail, :roles => :app do
-      run "tail -f #{shared_path}/log/#{environment}.log" do |channel, stream, data|
+      run "tail -f #{shared_path}/log/*.log" do |channel, stream, data|
         puts "#{channel[:host]}: #{data}"
         break if stream == :err
       end
