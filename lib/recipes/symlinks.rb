@@ -13,18 +13,18 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Make all the damn symlinks in a single run"
     task :make, :roles => :app, :except => { :no_release => true } do
       commands = normal_symlinks.map do |path|
-        "rm -rf #{release_path}/#{path} && \
-         ln -s #{shared_path}/#{path} #{release_path}/#{path}"
+        "rm -rf #{current_path}/#{path} && \
+         ln -s #{shared_path}/#{path} #{current_path}/#{path}"
       end
 
       commands += weird_symlinks.map do |from, to|
-        "rm -rf #{release_path}/#{to} && \
-         ln -s #{shared_path}/#{from} #{release_path}/#{to}"
+        "rm -rf #{current_path}/#{to} && \
+         ln -s #{shared_path}/#{from} #{current_path}/#{to}"
       end
 
 
       run <<-CMD
-        cd #{release_path} &&
+        cd #{current_path} &&
         #{commands.join(" && ")}
       CMD
     end
