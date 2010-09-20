@@ -1,4 +1,4 @@
-# Bundler
+ Bundler
 # Manages gems in a sane way.
 # http://gembundler.com/
 Capistrano::Configuration.instance(:must_exist).load do
@@ -11,7 +11,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     # [internal] runs bundle install on the app server
     task :install, :roles => :app, :except => { :no_release => true } do
-      run "cd #{release_path} && bundle install --deployment --without=development test"
+      run "cd #{current_path} && bundle install --deployment --without=development test"
     end
   end  
     
