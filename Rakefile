@@ -4,8 +4,8 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "capistrano-recipes"
-    gem.summary = %Q{Capistrano recipes}
+    gem.name = "dark-capistrano-recipes"
+    gem.summary = %Q{Darkside's Capistrano recipes}
     gem.description = 'Extend the Capistrano gem with these useful recipes'
     gem.email = "leonardobighetti@gmail.com"
     gem.homepage = "http://github.com/darkside/capistrano-recipes"
