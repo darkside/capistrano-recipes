@@ -47,6 +47,12 @@ Capistrano::Configuration.instance(:must_exist).load do
       symlinks.make
     end
 
+    desc "[Obsolete] Nothing to cleanup when using reset --hard on git"
+    task :cleanup, :except => { :no_release => true } do
+      #nothing to cleanup, we're not working with 'releases'
+      puts "Nothing to cleanup, yay!"
+    end
+
     namespace :rollback do
       desc "Rollback a single commit."
       task :default, :except => { :no_release => true } do
