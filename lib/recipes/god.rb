@@ -9,7 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   namespace :god do
     
     desc "Parses and uploads god configuration for this app"
-    task :setup do
+    task :setup, :roles => :app do
       generate_config(god_local_config, god_remote_config)
     end
 
