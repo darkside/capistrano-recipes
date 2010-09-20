@@ -2,24 +2,24 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :shared_children, %w(system log pids config)
 
   after "deploy:setup" do
-    db.create_yaml if Capistrano::CLI.ui.agree("Create database.yml in app's shared path?")  
+    db.create_yaml if Capistrano::CLI.ui.agree("Create database.yml in app's shared path? [Yn]")  
   end
   
   
   namespace :deploy do
     desc "Deploy it, github-style."
-    task :default do
+    task :default, :roles => :app, :except => { :no_release => true } do
       update
       restart
     end
     
     desc "[Seppuku] Destroy everything"
-    task :seppuku do
+    task :seppuku, :roles => :app, :except => { :no_release => true } do
       run "rm -rf #{current_path}; rm -rf #{shared_path}"
       rubycas.seppuku
     end
     
-     task :setup_dirs, :except => { :no_release => true } do
+     task :setup_dirs, :roles => :app, :except => { :no_release => true } do
       commands = shared_dirs.map do |path|
         "mkdir -p #{shared_path}/#{path}"
       end
@@ -27,35 +27,35 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     
     desc "Uploads your local config.yml to the server"
-    task :configure, :except => { :no_release => true } do
+    task :configure, :roles => :app, :except => { :no_release => true } do
       generate_config('config/config.yml', "#{shared_path}/config/config.yml")
     end
     
     desc "Setup a GitHub-style deployment."
-    task :setup, :except => { :no_release => true } do
+    task :setup, :roles => :app, :except => { :no_release => true } do
       run "rm -rf #{current_path}"
       setup_dirs
       run "git clone #{repository} #{current_path}"
     end
     
     desc "Update the deployed code."
-    task :update_code, :except => { :no_release => true } do
+    task :update_code, :roles => :app, :except => { :no_release => true } do
       run "cd #{current_path}; git fetch origin; git reset --hard #{branch}"
     end
 
-    task :symlink, :except => { :no_release => true } do
+    task :symlink, :roles => :app, :except => { :no_release => true } do
       symlinks.make
     end
 
     desc "[Obsolete] Nothing to cleanup when using reset --hard on git"
-    task :cleanup, :except => { :no_release => true } do
+    task :cleanup, :roles => :app, :except => { :no_release => true } do
       #nothing to cleanup, we're not working with 'releases'
       puts "Nothing to cleanup, yay!"
     end
 
     namespace :rollback do
-      desc "Rollback a single commit."
-      task :default, :except => { :no_release => true } do
+      desc "Rollback , :except => { :no_release => true }a single commit."
+      task :default, :roles => :app, :except => { :no_release => true } do
         set :branch, "HEAD^"
         deploy.default
       end    

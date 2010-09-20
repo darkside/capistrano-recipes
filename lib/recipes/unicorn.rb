@@ -69,7 +69,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     uploads the result to #{unicorn_remote_config}, to be loaded by whoever is booting \
     up the unicorn.
     EOF
-    task :setup do
+    task :setup, :roles => :app , :except => { :no_release => true } do
       # TODO: refactor this to a more generic setup task once we have more socket tasks.
       sudo "mkdir -p #{sockets_path}" 
       sudo "chown #{user}:#{group} #{sockets_path} -R"

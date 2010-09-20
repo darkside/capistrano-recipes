@@ -17,32 +17,32 @@ Capistrano::Configuration.instance(:must_exist).load do
   namespace :nginx do
     
     desc "Parses and uploads nginx configuration for this app."
-    task :setup do
+    task :setup, :roles => :app , :except => { :no_release => true } do
       generate_config(nginx_local_config, nginx_remote_config)
     end
     
     # [internal] Parses config file and outputs it to STDOUT
-    task :parse do
+    task :parse, :roles => :app , :except => { :no_release => true } do
       puts parse_config(nginx_local_config)
     end
     
     desc "Restart nginx"
-    task :restart do
+    task :restart, :roles => :app , :except => { :no_release => true } do
       sudo "service nginx restart"
     end
     
     desc "Stop nginx"
-    task :stop do
+    task :stop, :roles => :app , :except => { :no_release => true } do
       sudo "service nginx stop"
     end
     
     desc "Start nginx"
-    task :start do
+    task :start, :roles => :app , :except => { :no_release => true } do
       sudo "service nginx start"
     end
 
     desc "Show nginx status"
-    task :status do
+    task :status, :roles => :app , :except => { :no_release => true } do
       sudo "service nginx status"
     end
     
