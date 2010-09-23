@@ -48,8 +48,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     
     desc "Deploys and runs any pending migrations"
-    task :migrate do
-      run "cd #{current_path}; bundle exec rake RAILS_ENV#{rails_env} db:migrate"
+    task :migrate, :roles => :app, :except => { :no_release => true } do
+      run "cd #{current_path}; bundle exec rake RAILS_ENV=#{rails_env} db:migrate"
     end
 
     desc "[Obsolete] Nothing to cleanup when using reset --hard on git"
