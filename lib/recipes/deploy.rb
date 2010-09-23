@@ -46,6 +46,11 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :symlink, :roles => :app, :except => { :no_release => true } do
       symlinks.make
     end
+    
+    desc "Deploys and runs any pending migrations"
+    task :migrate do
+      run "cd #{current_path}; bundle exec rake RAILS_ENV#{rails_env} db:migrate"
+    end
 
     desc "[Obsolete] Nothing to cleanup when using reset --hard on git"
     task :cleanup, :roles => :app, :except => { :no_release => true } do
