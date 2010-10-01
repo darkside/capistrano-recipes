@@ -20,6 +20,10 @@ def is_using_nginx
   is_using('nginx',:web_server)
 end
 
+def is_using_passenger
+  is_using('passenger',:server)
+end
+
 def is_using_unicorn
   is_using('unicorn',:server)
 end

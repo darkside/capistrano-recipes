@@ -14,7 +14,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     _cset(:bin_god) { defined?(:rvm_ruby_string) ? 'bootup_god' : 'god' }
-    _cset(:server_name)    { "#{application}-unicorn" }
+    _cset(:server_name)    { "#{application}-#{server}" }
     _cset(:god_init_local) { "#{docs_path}/god/god.init" }
     _cset :god_init_temp,   '/tmp/god.init'
     _cset :god_init_remote, '/etc/init.d/god'
@@ -110,5 +110,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       sudo "#{bin_god} status"
     end
   end
-  after 'deploy:setup', 'god:setup' if is_using_god
+  after 'deploy:setup' do
+    god.setup if is_using_god && Capistrano::CLI.ui.agree("Create app.god in app's shared path? [Yn]")
+  end
 end

@@ -1,10 +1,15 @@
+    <% if is_using_unicorn %>
     upstream <%= application %>_app_server {
         server unix:<%= unicorn_socket %> fail_timeout=0;
     }
+    <% end %>
     # <%= application %> Server
     server {
         listen <%= application_port %>;
-
+        <% if is_using_passenger %>
+        rails_env <%= rails_env %>;
+        passenger_enabled on;
+        <% end %>
         client_max_body_size 500M;
         server_name <%= application %>;
 
@@ -71,15 +76,20 @@
         }
     }
     <% if application_uses_ssl %>
+    <% if is_using_unicorn %>
     upstream <%= application %>_app_ssl {
         server unix:<%= unicorn_socket %> fail_timeout=0;
     }  
+    <% end %>
     # This server is setup for ssl. Uncomment if 
     # you are using ssl as well as port 80.
     server {
       listen <%= application_port_ssl%>;
       server_name <%= application %>;
-
+      <% if is_using_passenger %>
+      rails_env <%= rails_env %>;
+      passenger_enabled on;
+      <% end %>
       ssl                     on;
       ssl_certificate         /etc/ssl/certs/server.crt;
       ssl_certificate_key     /etc/ssl/private/server.key;
