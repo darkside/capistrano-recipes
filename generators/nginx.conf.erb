@@ -61,11 +61,14 @@
           if (-f $request_filename.html) {
             rewrite (.*) $1.html break;
           }
-
+          
+          
+          <% if is_using_unicorn %>
           if (!-f $request_filename) {
             proxy_pass http://<%= application %>_app_server;
             break;
           }
+          <% end %>
 
         }
 
@@ -145,11 +148,13 @@
         if (-f $request_filename.html) {
           rewrite (.*) $1.html break;
         }
-
+        
+        <% if is_using_unicorn %>
         if (!-f $request_filename) {
           proxy_pass http://<%= application %>_app_ssl;
           break;
         }
+        <% end %>
       }
 
       error_page   500 502 503 504  /500.html;
