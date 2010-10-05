@@ -80,6 +80,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       db_config = ERB.new <<-EOF
       base: &base
         adapter: mysql
+        encoding: utf8
         username: #{db_user}
         password: #{db_pass}
 
