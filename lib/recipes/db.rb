@@ -102,4 +102,10 @@ Capistrano::Configuration.instance(:must_exist).load do
     set(:db_user) { Capistrano::CLI.ui.ask "Enter #{environment} database username:" }
     set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{environment} database password:" }
   end
+  
+  desc "Populates the database with seed data"
+  task :seed do
+    Capistrano::CLI.ui.say "Populating the database..."
+    run "cd #{current_path}; rake RAILS_ENV=#{variables[:rails_env]} db:seed"
+  end
 end
