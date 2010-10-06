@@ -1,4 +1,4 @@
- Bundler
+# Bundler
 # Manages gems in a sane way.
 # http://gembundler.com/
 Capistrano::Configuration.instance(:must_exist).load do
