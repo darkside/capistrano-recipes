@@ -14,7 +14,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     _cset(:bin_god) { defined?(:rvm_ruby_string) ? 'bootup_god' : 'god' }
-    _cset(:server_name)    { "#{application}-#{server}" }
+    _cset(:server_name)    { "#{application}-#{app_server}" }
     _cset(:god_init_local) { "#{docs_path}/god/god.init" }
     _cset :god_init_temp,   '/tmp/god.init'
     _cset :god_init_remote, '/etc/init.d/god'
@@ -72,10 +72,19 @@ Capistrano::Configuration.instance(:must_exist).load do
       puts "God is no more."
     end
     
-    task :restart_unicorn, :roles => :app do
-      sudo "#{bin_god} restart #{server_name}"
+    desc "Restarts everything"
+    namespace :restart do
+      task :default, :roles => :app, :except => { :no_release => true } do
+        sudo "#{bin_god} restart #{application}"
+      end
+      
+      desc "Restarts the app server"
+      task :app, :roles => :app, :except => { :no_release => true } do
+        sudo "#{bin_god} restart #{server-name}"
+      end
     end
     
+    desc "Fetches the log for the whole group"
     task :log, :roles => :app do
       sudo "#{bin_god} log #{application}"
     end
@@ -111,6 +120,6 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
   end
   after 'deploy:setup' do
-    god.setup if is_using_god && Capistrano::CLI.ui.agree("Create app.god in app's shared path? [Yn]")
-  end
+    god.setup if Capistrano::CLI.ui.agree("Create app.god in app's shared path? [Yn]")
+  end if is_using_god
 end

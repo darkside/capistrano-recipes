@@ -47,21 +47,19 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Unicorn 
   #------------------------------------------------------------------------------
   namespace :unicorn do    
-    desc "Start unicorn"    
+    desc "Starts unicorn directly"    
     task :start, :roles => :app do
       run unicorn_start_cmd
     end  
     
-    desc "Stop unicorn"    
-    task :stop, :roles => :app do    
+    desc "Stops unicorn directly"    
+    task :stop, :roles => :app do
       run unicorn_stop_cmd
     end  
     
-    desc "Restart unicorn"    
-    task :restart, :roles => :app do    
-      run unicorn_restart_cmd do |ch, stream, out|
-        
-      end
+    desc "Restarts unicorn directly"    
+    task :restart, :roles => :app do
+      run unicorn_restart_cmd
     end
     
     desc <<-EOF
@@ -77,7 +75,9 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
   end
   
-  after 'deploy:setup', 'unicorn:setup' if is_using_unicorn && Capistrano::CLI.ui.agree("Create unicorn configuration file? [Yn]")
+  after 'deploy:setup' do
+    unicorn.setup if Capistrano::CLI.ui.agree("Create unicorn configuration file? [Yn]")
+  end if is_using_unicorn
   
 end
 

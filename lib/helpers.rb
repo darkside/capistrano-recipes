@@ -21,11 +21,11 @@ def is_using_nginx
 end
 
 def is_using_passenger
-  is_using('passenger',:server)
+  is_using('passenger',:app_server)
 end
 
 def is_using_unicorn
-  is_using('unicorn',:server)
+  is_using('unicorn',:app_server)
 end
 
 def is_using_god
@@ -54,6 +54,14 @@ def parse_config(file)
   require 'erb'  #render not available in Capistrano 2
   template=File.read(file)          # read it
   return ERB.new(template).result(binding)   # parse it
+end
+
+
+# Prompts the user for a message to agree/decline,
+# 
+def ask(message, default=true)
+  Capistrano::CLI.ui.agree(message)
+
 end
 
 # Generates a configuration file parsing through ERB
