@@ -76,7 +76,7 @@ Capistrano::Configuration.instance.load do
       task :default, :roles => :app, :except => { :no_release => true } do
         sudo "#{bin_god} restart #{application}"
       end
-      
+
       desc "||DarkRecipes|| Restarts the app server"
       task :app, :roles => :app, :except => { :no_release => true } do
         sudo "#{bin_god} restart #{application}-#{app_server.to_s.downcase}"

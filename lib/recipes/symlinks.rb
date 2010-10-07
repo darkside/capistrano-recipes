@@ -25,5 +25,4 @@ Capistrano::Configuration.instance.load do
       CMD
     end
   end
-  
 end

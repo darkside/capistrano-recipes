@@ -44,17 +44,17 @@ Capistrano::Configuration.instance.load do
   # Unicorn 
   #------------------------------------------------------------------------------
   namespace :unicorn do    
-    desc "||DarkRecipes|| Starts unicorn directly"    
+    desc "||DarkRecipes|| Starts unicorn directly"
     task :start, :roles => :app do
       run unicorn_start_cmd
     end  
     
-    desc "||DarkRecipes|| Stops unicorn directly"    
+    desc "||DarkRecipes|| Stops unicorn directly"
     task :stop, :roles => :app do
       run unicorn_stop_cmd
     end  
     
-    desc "||DarkRecipes|| Restarts unicorn directly"    
+    desc "||DarkRecipes|| Restarts unicorn directly"
     task :restart, :roles => :app do
       run unicorn_restart_cmd
     end
@@ -66,8 +66,12 @@ Capistrano::Configuration.instance.load do
     EOF
     task :setup, :roles => :app , :except => { :no_release => true } do
       # TODO: refactor this to a more generic setup task once we have more socket tasks.
-      run "#{try_sudo} mkdir -p #{sockets_path}" 
-      run "#{try_sudo} chown #{user}:#{group} #{sockets_path} -R"
+      commands = []
+      commands << "mkdir -p #{sockets_path}"
+      commands << "chown #{user}:#{group} #{sockets_path} -R" 
+      commands << "chmod +rw #{sockets_path}"
+      
+      run commands.join(" && ")
       generate_config(unicorn_local_config,unicorn_remote_config)
     end
   end
@@ -75,6 +79,4 @@ Capistrano::Configuration.instance.load do
   after 'deploy:setup' do
     unicorn.setup if Capistrano::CLI.ui.agree("Create unicorn configuration file? [Yn]")
   end if is_using_unicorn
-  
 end
-

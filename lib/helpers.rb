@@ -52,6 +52,7 @@ def parse_config(file)
   return ERB.new(template).result(binding)   # parse it
 end
 
+
 # =========================================================================
 # Prompts the user for a message to agree/decline
 # =========================================================================
