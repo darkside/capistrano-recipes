@@ -95,8 +95,8 @@ Capistrano::Configuration.instance(:must_exist).load do
         set :use_sudo, false
     DESC
     task :restart, :roles => :app, :except => { :no_release => true } do
-      if exists?(:server)
-        case fetch(:server).to_s.downcase
+      if exists?(:app_server)
+        case fetch(:app_server).to_s.downcase
           when 'passenger'
             passenger.bounce
           when 'unicorn'

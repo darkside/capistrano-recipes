@@ -5,10 +5,10 @@
 
 Gem::Specification.new do |s|
   s.name = %q{dark-capistrano-recipes}
-  s.version = "0.6.12"
+  s.version = "0.6.14.0"
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Phil Misiowiec", "Leonardo Bighetti"]
-  s.date = %q{2010-10-06}
+  s.date = %q{2010-10-12}
   s.description = %q{Extend the Capistrano gem with these useful recipes}
   s.email = %q{leonardobighetti@gmail.com}
   s.extra_rdoc_files = [
