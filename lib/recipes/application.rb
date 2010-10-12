@@ -8,6 +8,7 @@ Capistrano::Configuration.instance.load do
   set :web_server, :nginx         unless exists?(:web_server)
   set :runner, user               unless exists?(:runner)
   set :application_port, 80       unless exists?(:application_port)
+
   set :application_uses_ssl, true unless exists?(:application_uses_ssl)
   set :application_port_ssl, 443  unless exists?(:application_port_ssl)
   

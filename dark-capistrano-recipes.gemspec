@@ -6,7 +6,8 @@
 Gem::Specification.new do |s|
   s.name = %q{dark-capistrano-recipes}
 
-  s.version = "0.6.17"
+  s.version = "0.6.16"
+
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Phil Misiowiec", "Leonardo Bighetti"]
