@@ -80,7 +80,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       
       desc "Restarts the app server"
       task :app, :roles => :app, :except => { :no_release => true } do
-        sudo "#{bin_god} restart #{server-name}"
+        sudo "#{bin_god} restart #{application}-#{app_server.to_s.downcase}"
       end
     end
     

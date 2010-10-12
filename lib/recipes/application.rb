@@ -9,7 +9,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :app_server, :unicorn   unless exists?(:app_server)
   set :web_server, :nginx     unless exists?(:web_server)
   set :runner, user           unless exists?(:runner)
-  
   # The port to listen to, normally we default to 80
   set :application_port, 80 unless exists?(:application_port)
   
