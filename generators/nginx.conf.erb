@@ -33,9 +33,7 @@
         
         location / {
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          #proxy_set_header X-Forwarded-Proto https;
           proxy_set_header Host $http_host;
-          #proxy_redirect off;
           
           # If the file exists as a static file serve it directly without
           # running all the other rewite tests on it
@@ -71,7 +69,16 @@
           <% end %>
 
         }
-
+        
+        # if the request is for a static resource, nginx should serve it directly
+        # and add a far future expires header to it, making the browser
+        # cache the resource and navigate faster over the website
+        location ~ ^/(images|javascripts|stylesheets|system)/ {
+          root /home/deployer/shop/current/public;
+          expires max;
+          break;
+        }
+        
         # Rails error pages
         error_page 500 502 503 504 /500.html;
         location = /500.html {
