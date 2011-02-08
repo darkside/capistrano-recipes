@@ -96,7 +96,7 @@ Capistrano::Configuration.instance.load do
           when 'passenger'
             passenger.bounce
           when 'unicorn'
-            unicorn.restart
+            is_using('god', :monitorer) ? god.restart.app : unicorn.restart
         end
       else
         puts "Dunno how to restart your internets! kthx!"

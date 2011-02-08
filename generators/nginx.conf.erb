@@ -80,6 +80,18 @@
         	 break;
         }
         
+        # Now this supposedly should work as it gets the filenames with querystrings that Rails provides.
+        # BUT there's a chance it could break the ajax calls.
+        location ~* \.(ico|css|gif|jpe?g|png)(\?[0-9]+)?$ {
+        	 expires max;
+        	 break;
+        }
+        
+        location ~ ^/javascripts/.*\.js(\?[0-9]+)?$ {
+        	 expires max;
+        	 break;
+        }
+        
         # if the request is for a static resource, nginx should serve it directly
         # and add a far future expires header to it, making the browser
         # cache the resource and navigate faster over the website
