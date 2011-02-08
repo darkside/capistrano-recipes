@@ -71,7 +71,7 @@ Capistrano::Configuration.instance.load do
       puts "God is no more."
     end
     
-    desc "Restarts everything"
+    desc "||DarkRecipes|| Use god to restart the app"
     namespace :restart do
       task :default, :roles => :app, :except => { :no_release => true } do
         sudo "#{bin_god} restart #{application}"
