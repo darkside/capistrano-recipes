@@ -2,13 +2,13 @@
 # God is a Process Monitoring Framework written in Ruby
 # More info at http://god.rubyforge.org/
 #------------------------------------------------------------------------------
-Capistrano::Configuration.instance(:must_exist).load do
+Capistrano::Configuration.instance.load do
   _cset(:god_local_config)  { "#{templates_path}/app.god.erb" }
   _cset(:god_remote_config) { "#{shared_path}/config/app.god" }
 
   namespace :god do
     
-    desc "Parses and uploads god configuration for this app"
+    desc "||DarkRecipes|| Parses and uploads god configuration for this app"
     task :setup, :roles => :app do
       generate_config(god_local_config, god_remote_config)
     end
@@ -24,7 +24,6 @@ Capistrano::Configuration.instance(:must_exist).load do
     _cset(:god_conf_local) { "#{docs_path}/god/god.conf" }
     _cset :god_conf_temp,   '/tmp/god.conf'
     _cset :god_conf_remote, '/etc/god/god.conf'
-    
     
     task :setup_temp, :roles => :app do
       sudo "rm -f #{god_conf_remote} #{god_init_remote} #{god_defo_remote}"
@@ -50,7 +49,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       sudo "mv #{god_defo_temp} #{god_defo_remote}"
     end
     
-    desc "Bootstraps god on your server. Be careful with this."
+    desc "||DarkRecipes|| Bootstraps god on your server. Be careful with this."
     task :bootstrap, :roles => :app do
       setup_temp
       setup_defo
@@ -60,7 +59,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       puts "God is bootstrapped. To remove use 'cap god:implode'"
     end
     
-    desc "(Seppuku) Completely remove god from the system init"
+    desc "||DarkRecipes|| (Seppuku) Completely remove god from the system init"
     task :implode, :roles => :app do
       #  Removing any system startup links for /etc/init.d/god ...
       sudo "update-rc.d -f god remove"
@@ -78,48 +77,49 @@ Capistrano::Configuration.instance(:must_exist).load do
         sudo "#{bin_god} restart #{application}"
       end
       
-      desc "Restarts the app server"
+      desc "||DarkRecipes|| Restarts the app server"
       task :app, :roles => :app, :except => { :no_release => true } do
         sudo "#{bin_god} restart #{application}-#{app_server.to_s.downcase}"
       end
     end
     
-    desc "Fetches the log for the whole group"
+    desc "||DarkRecipes|| Fetches the log for the whole group"
     task :log, :roles => :app do
       sudo "#{bin_god} log #{application}"
     end
     
-    desc "Reload config"
+    desc "||DarkRecipes|| Reload config"
     task :reload, :roles => :app do
       sudo "#{bin_god} load #{god_remote_config}"
     end
 
-    desc "Start god service"
+    desc "||DarkRecipes|| Start god service"
     task :start, :roles => :app do
       sudo "service god start"
     end
     
-    desc "Stops god service"
+    desc "||DarkRecipes|| Stops god service"
     task :stop, :roles => :app do
       sudo "service god stop"
     end
         
-    desc "Quit god, but not the processes it's monitoring"
+    desc "||DarkRecipes|| Quit god, but not the processes it's monitoring"
     task :quit, :roles => :app do
       sudo "#{bin_god} quit"
     end
 
-    desc "Terminate god and all monitored processes"
+    desc "||DarkRecipes|| Terminate god and all monitored processes"
     task :terminate, :roles => :app do
       sudo "#{bin_god} terminate"
     end
 
-    desc "Describe the status of the running tasks"
+    desc "||DarkRecipes|| Describe the status of the running tasks"
     task :status, :roles => :app do
       sudo "#{bin_god} status"
     end
   end
+  
   after 'deploy:setup' do
     god.setup if Capistrano::CLI.ui.agree("Create app.god in app's shared path? [Yn]")
-  end if is_using_god
+  end if is_using('god', :monitorer)
 end

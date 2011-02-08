@@ -1,6 +1,6 @@
-Capistrano::Configuration.instance(:must_exist).load do
+Capistrano::Configuration.instance.load do
   namespace :log do
-    desc "Tail all application log files"
+    desc "||DarkRecipes|| Tail all application log files"
     task :tail, :roles => :app do
       run "tail -f #{shared_path}/log/*.log" do |channel, stream, data|
         puts "#{channel[:host]}: #{data}"
@@ -9,7 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     
     desc <<-DESC
-    Install log rotation script; optional args: days=7, size=5M, group (defaults to same value as :user)
+    ||DarkRecipes|| Install log rotation script; optional args: days=7, size=5M, group (defaults to same value as :user)
     DESC
     task :rotate, :roles => :app do
       rotate_script = %Q{#{shared_path}/log/#{environment}.log {

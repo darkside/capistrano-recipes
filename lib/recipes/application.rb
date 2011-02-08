@@ -1,22 +1,15 @@
-Capistrano::Configuration.instance(:must_exist).load do
-
+Capistrano::Configuration.instance.load do
   # User settings
   set :user, 'deploy'   unless exists?(:user)
   set :group,'www-data' unless exists?(:group)
   
-  
   # Server settings
-  set :app_server, :unicorn   unless exists?(:app_server)
-  set :web_server, :nginx     unless exists?(:web_server)
-  set :runner, user           unless exists?(:runner)
-  # The port to listen to, normally we default to 80
-  set :application_port, 80 unless exists?(:application_port)
-  
-  # Are we using ssl as well? Used by generators to configure a ssl host
+  set :app_server, :unicorn       unless exists?(:app_server)
+  set :web_server, :nginx         unless exists?(:web_server)
+  set :runner, user               unless exists?(:runner)
+  set :application_port, 80       unless exists?(:application_port)
   set :application_uses_ssl, true unless exists?(:application_uses_ssl)
-  
-  # The port to listen to https requests, usually 443
-  set :application_port_ssl, 443 unless exists?(:application_port_ssl)
+  set :application_port_ssl, 443  unless exists?(:application_port_ssl)
   
   # Database settings
   set :database, :mysql unless exists?(:database)
@@ -33,12 +26,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   # Git settings for capistrano
   default_run_options[:pty] = true 
-  ssh_options[:forward_agent] = true
-  
-  # RVM settings
-  set :using_rvm, true unless exists?(:using_rvm)
-  # Sets the rvm to a specific version (or whatever env you want it to run in)
-  set :rvm_ruby_string, 'ree' unless exists?(:rvm_ruby_string)  
+  ssh_options[:forward_agent] = true  
   
   # Daemons settings
   # The unix socket that unicorn will be attached to.
@@ -54,7 +42,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :monitorer, 'god' unless exists?(:monitorer)
   
   # Application settings  
-  set :shared_dirs, %w( config uploads backup bundle tmp ) unless exists?(:shared_dirs)
+  set :shared_dirs, %w(config uploads backup bundle tmp) unless exists?(:shared_dirs)
   
   namespace :app do
     task :setup, :roles => :app do

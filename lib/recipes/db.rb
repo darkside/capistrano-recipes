@@ -1,9 +1,53 @@
 require 'erb'
 
-Capistrano::Configuration.instance(:must_exist).load do
+Capistrano::Configuration.instance.load do
   namespace :db do
     namespace :mysql do
+      desc <<-EOF
+      ||DarkRecipes|| Performs a compressed database dump. \
+      WARNING: This locks your tables for the duration of the mysqldump.
+      Don't run it madly!
+      EOF
+      task :dump, :roles => :db, :only => { :primary => true } do
+        prepare_from_yaml
+        run "mysqldump --user=#{db_user} -p --host=#{db_host} #{db_name} | bzip2 -z9 > #{db_remote_file}" do |ch, stream, out|
+        ch.send_data "#{db_pass}\n" if out =~ /^Enter password:/
+          puts out
+        end
+      end
+
+      desc "||DarkRecipes|| Restores the database from the latest compressed dump"
+      task :restore, :roles => :db, :only => { :primary => true } do
+        prepare_from_yaml
+        run "bzcat #{db_remote_file} | mysql --user=#{db_user} -p --host=#{db_host} #{db_name}" do |ch, stream, out|
+        ch.send_data "#{db_pass}\n" if out =~ /^Enter password:/
+          puts out
+        end
+      end
+
+      desc "||DarkRecipes|| Downloads the compressed database dump to this machine"
+      task :fetch_dump, :roles => :db, :only => { :primary => true } do
+        prepare_from_yaml
+        download db_remote_file, db_local_file, :via => :scp
+      end
     
+      desc "||DarkRecipes|| Create MySQL database and user for this environment using prompted values"
+      task :setup, :roles => :db, :only => { :primary => true } do
+        prepare_for_db_command
+
+        sql = <<-SQL
+        CREATE DATABASE #{db_name};
+        GRANT ALL PRIVILEGES ON #{db_name}.* TO #{db_user}@localhost IDENTIFIED BY '#{db_pass}';
+        SQL
+
+        run "mysql --user=#{db_admin_user} -p --execute=\"#{sql}\"" do |channel, stream, data|
+          if data =~ /^Enter password:/
+            pass = Capistrano::CLI.password_prompt "Enter database password for '#{db_admin_user}':"
+            channel.send_data "#{pass}\n" 
+          end
+        end
+      end
+      
       # Sets database variables from remote database.yaml
       def prepare_from_yaml
         set(:db_file) { "#{application}-dump.sql.bz2" }
@@ -24,55 +68,9 @@ Capistrano::Configuration.instance(:must_exist).load do
         file = capture "cat #{shared_path}/config/database.yml"
         db_config = YAML.load(file)
       end
-
-      desc <<-EOF
-      Performs a compressed database dump. \
-      WARNING: This locks your tables for the duration of the mysqldump.
-      Don't run it madly!
-      EOF
-      task :dump, :roles => :db, :only => { :primary => true } do
-        prepare_from_yaml
-        run "mysqldump --user=#{db_user} -p --host=#{db_host} #{db_name} | bzip2 -z9 > #{db_remote_file}" do |ch, stream, out|
-        ch.send_data "#{db_pass}\n" if out =~ /^Enter password:/
-          puts out
-        end
-      end
-
-      desc "Restores the database from the latest compressed dump"
-      task :restore, :roles => :db, :only => { :primary => true } do
-        prepare_from_yaml
-        run "bzcat #{db_remote_file} | mysql --user=#{db_user} -p --host=#{db_host} #{db_name}" do |ch, stream, out|
-        ch.send_data "#{db_pass}\n" if out =~ /^Enter password:/
-          puts out
-        end
-      end
-
-      desc "Downloads the compressed database dump to this machine"
-      task :fetch_dump, :roles => :db, :only => { :primary => true } do
-        prepare_from_yaml
-        download db_remote_file, db_local_file, :via => :scp
-      end
-    
-    
-      desc "Create MySQL database and user for this environment using prompted values"
-      task :setup, :roles => :db, :only => { :primary => true } do
-        prepare_for_db_command
-
-        sql = <<-SQL
-        CREATE DATABASE #{db_name};
-        GRANT ALL PRIVILEGES ON #{db_name}.* TO #{db_user}@localhost IDENTIFIED BY '#{db_pass}';
-        SQL
-
-        run "mysql --user=#{db_admin_user} -p --execute=\"#{sql}\"" do |channel, stream, data|
-          if data =~ /^Enter password:/
-            pass = Capistrano::CLI.password_prompt "Enter database password for '#{db_admin_user}':"
-            channel.send_data "#{pass}\n" 
-          end
-        end
-      end      
     end
     
-    desc "Create database.yml in shared path with settings for current stage and test env"
+    desc "||DarkRecipes|| Create database.yml in shared path with settings for current stage and test env"
     task :create_yaml do      
       set(:db_user) { Capistrano::CLI.ui.ask "Enter #{environment} database username:" }
       set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{environment} database password:" }
@@ -108,5 +106,9 @@ Capistrano::Configuration.instance(:must_exist).load do
   task :seed do
     Capistrano::CLI.ui.say "Populating the database..."
     run "cd #{current_path}; rake RAILS_ENV=#{variables[:rails_env]} db:seed"
+  end
+  
+  after "deploy:setup" do
+    db.create_yaml if Capistrano::CLI.ui.agree("Create database.yml in app's shared path? [Yn]")
   end
 end

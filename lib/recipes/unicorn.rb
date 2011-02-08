@@ -1,4 +1,4 @@
-Capistrano::Configuration.instance(:must_exist).load do
+Capistrano::Configuration.instance.load do
   # Number of workers (Rule of thumb is 2 per CPU)
   # Just be aware that every worker needs to cache all classes and thus eat some
   # of your RAM. 
@@ -16,13 +16,10 @@ Capistrano::Configuration.instance(:must_exist).load do
   # The wrapped bin to start unicorn
   # This is necessary if you're using rvm
   set :unicorn_bin, 'unicorn_rails' unless exists?(:unicorn_bin)
-  
-
   set :unicorn_socket, File.join(sockets_path,'unicorn.sock') unless exists?(:unicorn_socket)
 
   # Defines where the unicorn pid will live.
   set(:unicorn_pid) { File.join(pids_path, "unicorn.pid") } unless exists?(:unicorn_pid)
-
 
   # Our unicorn template to be parsed by erb
   # You may need to generate this file the first time with the generator
@@ -47,23 +44,23 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Unicorn 
   #------------------------------------------------------------------------------
   namespace :unicorn do    
-    desc "Starts unicorn directly"    
+    desc "||DarkRecipes|| Starts unicorn directly"    
     task :start, :roles => :app do
       run unicorn_start_cmd
     end  
     
-    desc "Stops unicorn directly"    
+    desc "||DarkRecipes|| Stops unicorn directly"    
     task :stop, :roles => :app do
       run unicorn_stop_cmd
     end  
     
-    desc "Restarts unicorn directly"    
+    desc "||DarkRecipes|| Restarts unicorn directly"    
     task :restart, :roles => :app do
       run unicorn_restart_cmd
     end
     
     desc <<-EOF
-    Parses the configuration file through ERB to fetch our variables and \
+    ||DarkRecipes|| Parses the configuration file through ERB to fetch our variables and \
     uploads the result to #{unicorn_remote_config}, to be loaded by whoever is booting \
     up the unicorn.
     EOF

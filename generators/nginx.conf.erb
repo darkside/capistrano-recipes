@@ -60,14 +60,24 @@
             rewrite (.*) $1.html break;
           }
           
-          
           <% if is_using_unicorn %>
           if (!-f $request_filename) {
             proxy_pass http://<%= application %>_app_server;
             break;
           }
           <% end %>
-
+        }
+        
+        # Now this supposedly should work as it gets the filenames with querystrings that Rails provides.
+        # BUT there's a chance it could break the ajax calls.
+        location ~* \.(ico|css|gif|jpe?g|png)(\?[0-9]+)?$ {
+        	 expires max;
+        	 break;
+        }
+        
+        location ~ ^/javascripts/.*\.js(\?[0-9]+)?$ {
+        	 expires max;
+        	 break;
         }
         
         # if the request is for a static resource, nginx should serve it directly
@@ -85,12 +95,15 @@
           root <%= deploy_to %>/current/public;
         }
     }
+    
     <% if application_uses_ssl %>
+      
     <% if is_using_unicorn %>
     upstream <%= application %>_app_ssl {
-        server unix:<%= unicorn_socket %> fail_timeout=0;
+      server unix:<%= unicorn_socket %> fail_timeout=0;
     }  
     <% end %>
+    
     # This server is setup for ssl. Uncomment if 
     # you are using ssl as well as port 80.
     server {

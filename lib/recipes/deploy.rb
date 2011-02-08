@@ -1,65 +1,61 @@
-Capistrano::Configuration.instance(:must_exist).load do
+Capistrano::Configuration.instance.load do
   set :shared_children, %w(system log pids config)
-
-  after "deploy:setup" do
-    db.create_yaml if Capistrano::CLI.ui.agree("Create database.yml in app's shared path? [Yn]")  
-  end
-  
   
   namespace :deploy do
-    desc "Deploy it, github-style."
+    desc "||DarkRecipes|| Deploy it, github-style."
     task :default, :roles => :app, :except => { :no_release => true } do
       update
       restart
     end
     
-    desc "[Seppuku] Destroy everything"
+    desc "||DarkRecipes|| Destroys everything"
     task :seppuku, :roles => :app, :except => { :no_release => true } do
       run "rm -rf #{current_path}; rm -rf #{shared_path}"
-      rubycas.seppuku
     end
     
-     task :setup_dirs, :roles => :app, :except => { :no_release => true } do
+    desc "||DarkRecipes|| Create shared dirs"
+    task :setup_dirs, :roles => :app, :except => { :no_release => true } do
       commands = shared_dirs.map do |path|
         "mkdir -p #{shared_path}/#{path}"
       end
       run commands.join(" && ")
     end
     
-    desc "Uploads your local config.yml to the server"
+    desc "||DarkRecipes|| Uploads your local config.yml to the server"
     task :configure, :roles => :app, :except => { :no_release => true } do
       generate_config('config/config.yml', "#{shared_path}/config/config.yml")
     end
     
-    desc "Setup a GitHub-style deployment."
+    desc "||DarkRecipes|| Setup a GitHub-style deployment."
     task :setup, :roles => :app, :except => { :no_release => true } do
       run "rm -rf #{current_path}"
       setup_dirs
       run "git clone #{repository} #{current_path}"
     end
     
-    desc "Update the deployed code."
+    desc "||DarkRecipes|| Update the deployed code."
     task :update_code, :roles => :app, :except => { :no_release => true } do
       run "cd #{current_path}; git fetch origin; git reset --hard #{branch}"
     end
 
+    desc "||DarkRecipes|| Alias for symlinks:make"
     task :symlink, :roles => :app, :except => { :no_release => true } do
       symlinks.make
     end
     
-    desc "Deploys and runs any pending migrations"
+    desc "||DarkRecipes|| Remote run for rake db:migrate"
     task :migrate, :roles => :app, :except => { :no_release => true } do
       run "cd #{current_path}; bundle exec rake RAILS_ENV=#{rails_env} db:migrate"
     end
 
-    desc "[Obsolete] Nothing to cleanup when using reset --hard on git"
+    desc "||DarkRecipes|| [Obsolete] Nothing to cleanup when using reset --hard on git"
     task :cleanup, :roles => :app, :except => { :no_release => true } do
       #nothing to cleanup, we're not working with 'releases'
       puts "Nothing to cleanup, yay!"
     end
 
     namespace :rollback do
-      desc "Rollback , :except => { :no_release => true }a single commit."
+      desc "||DarkRecipes|| Rollback , :except => { :no_release => true }a single commit."
       task :default, :roles => :app, :except => { :no_release => true } do
         set :branch, "HEAD^"
         deploy.default
@@ -67,7 +63,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     desc <<-DESC
-      Restarts your application. This depends heavily on what server you're running. 
+      ||DarkRecipes|| Restarts your application. This depends heavily on what server you're running. 
       If you are running Phusion Passenger, you can explicitly set the server type:
       
         set :server, :passenger
@@ -92,7 +88,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       that user. If you are in an environment where you can't use sudo, set \
       the :use_sudo variable to false:
 
-        set :use_sudo, false
+      set :use_sudo, false
     DESC
     task :restart, :roles => :app, :except => { :no_release => true } do
       if exists?(:app_server)
@@ -100,7 +96,7 @@ Capistrano::Configuration.instance(:must_exist).load do
           when 'passenger'
             passenger.bounce
           when 'unicorn'
-            is_using_god ? god.restart.app : unicorn.restart
+            is_using('god', :monitorer) ? god.restart.app : unicorn.restart
         end
       else
         puts "Dunno how to restart your internets! kthx!"

@@ -28,10 +28,6 @@ def is_using_unicorn
   is_using('unicorn',:app_server)
 end
 
-def is_using_god
-  is_using('god',:monitorer)
-end
-
 def is_using(something, with_some_var)
  exists?(with_some_var.to_sym) && fetch(with_some_var.to_sym).to_s.downcase == something
 end
@@ -56,12 +52,11 @@ def parse_config(file)
   return ERB.new(template).result(binding)   # parse it
 end
 
-
-# Prompts the user for a message to agree/decline,
-# 
+# =========================================================================
+# Prompts the user for a message to agree/decline
+# =========================================================================
 def ask(message, default=true)
   Capistrano::CLI.ui.agree(message)
-
 end
 
 # Generates a configuration file parsing through ERB
@@ -75,8 +70,10 @@ def generate_config(local_file,remote_file)
   `rm #{temp_file}`
 end 
 
-# Execute a rake task, example:
-#   run_rake log:clear
+# =========================================================================
+# Executes a basic rake task. 
+# Example: run_rake log:clear
+# =========================================================================
 def run_rake(task)
   run "cd #{current_path} && rake #{task} RAILS_ENV=#{environment}"
 end

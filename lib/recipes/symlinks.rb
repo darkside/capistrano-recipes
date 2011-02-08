@@ -1,19 +1,13 @@
-Capistrano::Configuration.instance(:must_exist).load do
+Capistrano::Configuration.instance.load do
   # These are set to the same structure in shared <=> current
-  set :normal_symlinks, %w(
-    tmp
-    log
-    config/database.yml
-  ) unless exists?(:normal_symlinks)
+  set :normal_symlinks, %w(tmp log config/database.yml) unless exists?(:normal_symlinks)
   
   # Weird symlinks go somewhere else. Weird.
-  set :weird_symlinks, {
-     'bundle' => 'vendor/bundle',
-     'pids'   => 'tmp/pids'
-  } unless exists?(:weird_symlinks)
+  set :weird_symlinks, { 'bundle' => 'vendor/bundle',
+                         'pids'   => 'tmp/pids' } unless exists?(:weird_symlinks)
 
   namespace :symlinks do
-    desc "Make all the damn symlinks in a single run"
+    desc "||DarkRecipes|| Make all the symlinks in a single run"
     task :make, :roles => :app, :except => { :no_release => true } do
       commands = normal_symlinks.map do |path|
         "rm -rf #{current_path}/#{path} && \
@@ -24,7 +18,6 @@ Capistrano::Configuration.instance(:must_exist).load do
         "rm -rf #{current_path}/#{to} && \
          ln -s #{shared_path}/#{from} #{current_path}/#{to}"
       end
-
 
       run <<-CMD
         cd #{current_path} &&
