@@ -3,6 +3,7 @@ Capistrano::Configuration.instance.load do
   set :using_rvm, true unless exists?(:using_rvm)
   
   if defined?(using_rvm) && using_rvm
+    puts "não devia estar aqui"
     $:.unshift(File.expand_path('./lib', ENV['rvm_path']))  # Add RVM's lib directory to the load path.
     require "rvm/capistrano"                                # Load RVM's capistrano plugin.
     

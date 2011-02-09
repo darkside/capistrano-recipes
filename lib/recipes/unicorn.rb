@@ -15,7 +15,7 @@ Capistrano::Configuration.instance.load do
 
   # The wrapped bin to start unicorn
   # This is necessary if you're using rvm
-  set :unicorn_bin, 'unicorn_rails' unless exists?(:unicorn_bin)
+  set :unicorn_bin, 'bundle exec unicorn' unless exists?(:unicorn_bin)
   set :unicorn_socket, File.join(sockets_path,'unicorn.sock') unless exists?(:unicorn_socket)
 
   # Defines where the unicorn pid will live.
@@ -44,12 +44,12 @@ Capistrano::Configuration.instance.load do
   # Unicorn 
   #------------------------------------------------------------------------------
   namespace :unicorn do    
-    desc "||DarkRecipes|| Starts unicorn directly"
+    desc "|DarkRecipes| Starts unicorn directly"
     task :start, :roles => :app do
       run unicorn_start_cmd
     end  
     
-    desc "||DarkRecipes|| Stops unicorn directly"
+    desc "|DarkRecipes| Stops unicorn directly"
     task :stop, :roles => :app do
       run unicorn_stop_cmd
     end  
@@ -60,7 +60,7 @@ Capistrano::Configuration.instance.load do
     end
     
     desc <<-EOF
-    ||DarkRecipes|| Parses the configuration file through ERB to fetch our variables and \
+    |DarkRecipes| Parses the configuration file through ERB to fetch our variables and \
     uploads the result to #{unicorn_remote_config}, to be loaded by whoever is booting \
     up the unicorn.
     EOF

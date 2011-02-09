@@ -14,32 +14,32 @@ Capistrano::Configuration.instance.load do
   # Nginx tasks are not *nix agnostic, they assume you're using Debian/Ubuntu.
   # Override them as needed.
   namespace :nginx do
-    desc "||DarkRecipes|| Parses and uploads nginx configuration for this app."
+    desc "|DarkRecipes| Parses and uploads nginx configuration for this app."
     task :setup, :roles => :app , :except => { :no_release => true } do
       generate_config(nginx_local_config, nginx_remote_config)
     end
     
-    desc "||DarkRecipes|| Parses config file and outputs it to STDOUT (internal task)"
+    desc "|DarkRecipes| Parses config file and outputs it to STDOUT (internal task)"
     task :parse, :roles => :app , :except => { :no_release => true } do
       puts parse_config(nginx_local_config)
     end
     
-    desc "||DarkRecipes|| Restart nginx"
+    desc "|DarkRecipes| Restart nginx"
     task :restart, :roles => :app , :except => { :no_release => true } do
       sudo "service nginx restart"
     end
     
-    desc "||DarkRecipes|| Stop nginx"
+    desc "|DarkRecipes| Stop nginx"
     task :stop, :roles => :app , :except => { :no_release => true } do
       sudo "service nginx stop"
     end
     
-    desc "||DarkRecipes|| Start nginx"
+    desc "|DarkRecipes| Start nginx"
     task :start, :roles => :app , :except => { :no_release => true } do
       sudo "service nginx start"
     end
 
-    desc "||DarkRecipes|| Show nginx status"
+    desc "|DarkRecipes| Show nginx status"
     task :status, :roles => :app , :except => { :no_release => true } do
       sudo "service nginx status"
     end

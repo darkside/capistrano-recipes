@@ -32,6 +32,11 @@
         }
         
         location / {
+          <% if is_using_passenger %>
+          rails_env <%= rails_env %>;
+          passenger_enabled on;
+          <% end %>
+          
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header Host $http_host;
           
@@ -144,6 +149,11 @@
       }
 
       location / {
+        <% if is_using_passenger %>
+        rails_env <%= rails_env %>;
+        passenger_enabled on;
+        <% end %>
+        
         # needed to forward user's IP address to rails
         proxy_set_header  X-Real-IP  $remote_addr;
 
