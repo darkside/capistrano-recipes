@@ -7,11 +7,16 @@ Useful Capistrano recipes including:
 * Log rotation and tailing commands
 * Restart and profile Phusion Passenger application server
 * Configure, start/stop/restart Unicorn application server
+* Send commands to God or Bluepill monitoring tools
+* Send commands to Thinking Sphinx
 
 ==Included Tasks
 
 * cap db:create_yaml
 * cap db:mysql:setup
+* cap db:mysql:dump
+* cap db:mysql:fetch_dump
+* cap db:mysql:restore
 * cap log:rotate
 * cap log:tail
 * cap passenger:bounce
@@ -27,6 +32,27 @@ Useful Capistrano recipes including:
 * cap unicorn:restart
 * cap unicorn:setup
 * cap symlinks:make
+* cap god:setup
+* cap god:implode
+* cap god:restart
+* cap god:reload
+* cap god:status
+* cap god:terminate
+* cap god:start
+* cap god:stop
+* cap god:quit
+* cap bluepill:install
+* cap bluepill:init
+* cap bluepill:start
+* cap bluepill:restart
+* cap bluepill:stop
+* cap bluepill:status
+* cap sphinx:config
+* cap sphinx:start
+* cap sphinx:stop
+* cap sphinx:rebuild
+* cap sphinx:index
+* cap sphinx:symlinks
 
 ==Installation
 
@@ -43,7 +69,7 @@ Optionally install the Capistrano extensions gem to give you multistage support:
 Install this gem:
 
   sudo gem install capistrano-recipes --source=http://gemcutter.com
-
+  
 To setup the initial Capistrano deploy file, go to your Rails app folder via command line and enter:
 
   capify .
@@ -52,8 +78,10 @@ To setup the initial Capistrano deploy file, go to your Rails app folder via com
 
 Inside the newly created config/deploy.rb, add:
 
-  require 'capistrano_recipes'
   require 'capistrano/ext/multistage' # only require if you've installed Cap ext gem
+  
+  # This one should go at the end of your deploy.rb
+  require 'capistrano_recipes'
 
 ===RVM
 

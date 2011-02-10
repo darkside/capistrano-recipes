@@ -27,7 +27,18 @@ Capistrano::Configuration.instance.load do
 
   # Git settings for capistrano
   default_run_options[:pty] = true 
-  ssh_options[:forward_agent] = true  
+  ssh_options[:forward_agent] = true
+  
+  # RVM settings
+  set :using_rvm, true unless exists?(:using_rvm)
+  
+  if using_rvm
+    $:.unshift(File.expand_path('./lib', ENV['rvm_path']))  # Add RVM's lib directory to the load path.
+    require "rvm/capistrano"                                # Load RVM's capistrano plugin.
+    
+    # Sets the rvm to a specific version (or whatever env you want it to run in)
+    set :rvm_ruby_string, 'ree' unless exists?(:rvm_ruby_string)
+  end
   
   # Daemons settings
   # The unix socket that unicorn will be attached to.
