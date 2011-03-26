@@ -111,7 +111,11 @@ If you're running Phusion Passenger (http://www.modrails.com) be sure you add th
 If you're running Unicorn (http://unicorn.bogomips.org/) be sure to add this line instead:
   
   set :server, :unicorn
+
+==Contributors (thank you!)
+
+* Leonardob Bighetti
   
 ==Copyright
 
-Copyright (c) 2009 Webficient LLC, Phil Misiowiec. See LICENSE for details.
+Copyright (c) 2009-2011 Webficient LLC, Phil Misiowiec. See LICENSE for details.
