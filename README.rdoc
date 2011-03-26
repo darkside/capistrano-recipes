@@ -114,6 +114,7 @@ If you're running Unicorn (http://unicorn.bogomips.org/) be sure to add this lin
 
 ==Contributors (thank you!)
 
+* Rogério Augusto
 * Leonardob Bighetti
   
 ==Copyright
