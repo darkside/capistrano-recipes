@@ -7,7 +7,7 @@ Capistrano::Configuration.instance.load do
                          'pids'   => 'tmp/pids' } unless exists?(:weird_symlinks)
 
   namespace :symlinks do
-    desc "|DarkRecipes| Make all the symlinks in a single run"
+    desc "|capistrano-recipes| Make all the symlinks in a single run"
     task :make, :roles => :app, :except => { :no_release => true } do
       commands = normal_symlinks.map do |path|
         "rm -rf #{current_path}/#{path} && \

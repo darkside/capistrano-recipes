@@ -2,18 +2,18 @@ Capistrano::Configuration.instance.load do
   set :shared_children, %w(system log pids config)
   
   namespace :deploy do
-    desc "|DarkRecipes| Deploy it, github-style."
+    desc "|capistrano-recipes| Deploy it, github-style."
     task :default, :roles => :app, :except => { :no_release => true } do
       update
       restart
     end
     
-    desc "|DarkRecipes| Destroys everything"
+    desc "|capistrano-recipes| Destroys everything"
     task :seppuku, :roles => :app, :except => { :no_release => true } do
       run "rm -rf #{current_path}; rm -rf #{shared_path}"
     end
     
-    desc "|DarkRecipes| Create shared dirs"
+    desc "|capistrano-recipes| Create shared dirs"
     task :setup_dirs, :roles => :app, :except => { :no_release => true } do
       commands = shared_dirs.map do |path|
         "mkdir -p #{shared_path}/#{path}"
@@ -21,41 +21,41 @@ Capistrano::Configuration.instance.load do
       run commands.join(" && ")
     end
     
-    desc "|DarkRecipes| Uploads your local config.yml to the server"
+    desc "|capistrano-recipes| Uploads your local config.yml to the server"
     task :configure, :roles => :app, :except => { :no_release => true } do
       generate_config('config/config.yml', "#{shared_path}/config/config.yml")
     end
     
-    desc "|DarkRecipes| Setup a GitHub-style deployment."
+    desc "|capistrano-recipes| Setup a GitHub-style deployment."
     task :setup, :roles => :app, :except => { :no_release => true } do
       run "rm -rf #{current_path}"
       setup_dirs
       run "git clone #{repository} #{current_path}"
     end
     
-    desc "|DarkRecipes| Update the deployed code."
+    desc "|capistrano-recipes| Update the deployed code."
     task :update_code, :roles => :app, :except => { :no_release => true } do
       run "cd #{current_path}; git fetch origin; git reset --hard #{branch}"
     end
 
-    desc "|DarkRecipes| Alias for symlinks:make"
+    desc "|capistrano-recipes| Alias for symlinks:make"
     task :symlink, :roles => :app, :except => { :no_release => true } do
       symlinks.make
     end
     
-    desc "|DarkRecipes| Remote run for rake db:migrate"
+    desc "|capistrano-recipes| Remote run for rake db:migrate"
     task :migrate, :roles => :app, :except => { :no_release => true } do
       run "cd #{current_path}; bundle exec rake RAILS_ENV=#{rails_env} db:migrate"
     end
 
-    desc "|DarkRecipes| [Obsolete] Nothing to cleanup when using reset --hard on git"
+    desc "|capistrano-recipes| [Obsolete] Nothing to cleanup when using reset --hard on git"
     task :cleanup, :roles => :app, :except => { :no_release => true } do
       #nothing to cleanup, we're not working with 'releases'
       puts "Nothing to cleanup, yay!"
     end
 
     namespace :rollback do
-      desc "|DarkRecipes| Rollback , :except => { :no_release => true }a single commit."
+      desc "|capistrano-recipes| Rollback , :except => { :no_release => true }a single commit."
       task :default, :roles => :app, :except => { :no_release => true } do
         set :branch, "HEAD^"
         deploy.default
@@ -63,7 +63,7 @@ Capistrano::Configuration.instance.load do
     end
 
     desc <<-DESC
-      |DarkRecipes| Restarts your application. This depends heavily on what server you're running. 
+      |capistrano-recipes| Restarts your application. This depends heavily on what server you're running. 
       If you are running Phusion Passenger, you can explicitly set the server type:
       
         set :server, :passenger
@@ -83,7 +83,7 @@ Capistrano::Configuration.instance.load do
       
       set :server, :unicorn
 
-      By default, this will be |DarkRecipes| d via sudo as the `app' user. If \
+      By default, this will be |capistrano-recipes| d via sudo as the `app' user. If \
       you wish to run it as a different user, set the :runner variable to \
       that user. If you are in an environment where you can't use sudo, set \
       the :use_sudo variable to false:

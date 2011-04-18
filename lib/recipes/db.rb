@@ -4,7 +4,7 @@ Capistrano::Configuration.instance.load do
   namespace :db do
     namespace :mysql do
       desc <<-EOF
-      |DarkRecipes| Performs a compressed database dump. \
+      |capistrano-recipes| Performs a compressed database dump. \
       WARNING: This locks your tables for the duration of the mysqldump.
       Don't run it madly!
       EOF
@@ -16,7 +16,7 @@ Capistrano::Configuration.instance.load do
         end
       end
 
-      desc "|DarkRecipes| Restores the database from the latest compressed dump"
+      desc "|capistrano-recipes| Restores the database from the latest compressed dump"
       task :restore, :roles => :db, :only => { :primary => true } do
         prepare_from_yaml
         run "bzcat #{db_remote_file} | mysql --user=#{db_user} -p --host=#{db_host} #{db_name}" do |ch, stream, out|
@@ -25,13 +25,13 @@ Capistrano::Configuration.instance.load do
         end
       end
 
-      desc "|DarkRecipes| Downloads the compressed database dump to this machine"
+      desc "|capistrano-recipes| Downloads the compressed database dump to this machine"
       task :fetch_dump, :roles => :db, :only => { :primary => true } do
         prepare_from_yaml
         download db_remote_file, db_local_file, :via => :scp
       end
     
-      desc "|DarkRecipes| Create MySQL database and user for this environment using prompted values"
+      desc "|capistrano-recipes| Create MySQL database and user for this environment using prompted values"
       task :setup, :roles => :db, :only => { :primary => true } do
         prepare_for_db_command
 
@@ -70,7 +70,7 @@ Capistrano::Configuration.instance.load do
       end
     end
     
-    desc "|DarkRecipes| Create database.yml in shared path with settings for current stage and test env"
+    desc "|capistrano-recipes| Create database.yml in shared path with settings for current stage and test env"
     task :create_yaml do      
       set(:db_user) { Capistrano::CLI.ui.ask "Enter #{environment} database username:" }
       set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{environment} database password:" }
