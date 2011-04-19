@@ -7,7 +7,7 @@ Capistrano::Configuration.instance.load do
     
     desc "|capistrano-recipes| Stop processes that bluepill is monitoring and quit bluepill"
     task :quit, :roles => [:app] do
-      args = options || ""
+      args = exists?(:options) ? options : ''
       begin
         sudo "bluepill stop #{args}"
       rescue
@@ -24,25 +24,25 @@ Capistrano::Configuration.instance.load do
  
     desc "|capistrano-recipes| Starts your previous stopped pill"
     task :start, :roles =>[:app] do
-      args = options || ""
+      args = exists?(:options) ? options : ''
       sudo "bluepill start #{args}"
     end
     
     desc "|capistrano-recipes| Stops some bluepill monitored process"
     task :stop, :roles =>[:app] do
-      args = options || ""
+      args = exists?(:options) ? options : ''
       sudo "bluepill stop #{args}"
     end
     
     desc "|capistrano-recipes| Restarts the pill from {your-app}/config/pills/{app-name}.pill"
     task :restart, :roles =>[:app] do
-      args = options || ""
+      args = exists?(:options) ? options : ''
       sudo "bluepill restart #{args}"
     end
  
     desc "|capistrano-recipes| Prints bluepills monitored processes statuses"
     task :status, :roles => [:app] do
-      args = options || ""
+      args = exists?(:options) ? options : ''
       sudo "bluepill status #{args}"
     end
   end
