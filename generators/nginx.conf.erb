@@ -20,7 +20,7 @@
 
         # path for static files
         root <%= deploy_to %>/current/public;
-        access_log <%= deploy_to %>/current/log/nginx.access.log main;
+        access_log <%= deploy_to %>/current/log/nginx.access.log;
         error_log  <%= deploy_to %>/current/log/nginx.error.log info;
 
         # this rewrites all the requests to the maintenance.html
@@ -30,24 +30,24 @@
           rewrite  ^(.*)$  /system/maintenance.html last;
           break;
         }
-        
+
         location / {
           <% if is_using_passenger %>
           rails_env <%= rails_env %>;
           passenger_enabled on;
           <% end %>
-          
+
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header Host $http_host;
-          
+
           # If the file exists as a static file serve it directly without
           # running all the other rewite tests on it
-          if (-f $request_filename) { 
-            break; 
+          if (-f $request_filename) {
+            break;
           }
 
           # check for index.html for directory index
-          # if its there on the filesystem then rewite 
+          # if its there on the filesystem then rewite
           # the url to add /index.html to the end of it
           # and then break to send it to the next config rules.
           if (-f $request_filename/index.html) {
@@ -57,14 +57,14 @@
           # this is the meat of the rails page caching config
           # it adds .html to the end of the url and then checks
           # the filesystem for that file. If it exists, then we
-          # rewite the url to have explicit .html on the end 
+          # rewite the url to have explicit .html on the end
           # and then send it on its way to the next config rule.
-          # if there is no file on the fs then it sets all the 
+          # if there is no file on the fs then it sets all the
           # necessary headers and proxies to our upstream mongrels
           if (-f $request_filename.html) {
             rewrite (.*) $1.html break;
           }
-          
+
           <% if is_using_unicorn %>
           if (!-f $request_filename) {
             proxy_pass http://<%= application %>_app_server;
@@ -72,56 +72,35 @@
           }
           <% end %>
         }
-        
+
         # Now this supposedly should work as it gets the filenames with querystrings that Rails provides.
         # BUT there's a chance it could break the ajax calls.
         location ~* \.(ico|css|gif|jpe?g|png)(\?[0-9]+)?$ {
         	 expires max;
         	 break;
         }
-        
+
         location ~ ^/javascripts/.*\.js(\?[0-9]+)?$ {
         	 expires max;
         	 break;
         }
-        
-        # Now this supposedly should work as it gets the filenames with querystrings that Rails provides.
-        # BUT there's a chance it could break the ajax calls.
-        location ~* \.(ico|css|gif|jpe?g|png)(\?[0-9]+)?$ {
-        	 expires max;
-        	 break;
-        }
-        
-        location ~ ^/javascripts/.*\.js(\?[0-9]+)?$ {
-        	 expires max;
-        	 break;
-        }
-        
-        # if the request is for a static resource, nginx should serve it directly
-        # and add a far future expires header to it, making the browser
-        # cache the resource and navigate faster over the website
-        location ~ ^/(images|javascripts|stylesheets|system)/ {
-          root /home/deployer/shop/current/public;
-          expires max;
-          break;
-        }
-        
+
         # Rails error pages
         error_page 500 502 503 504 /500.html;
         location = /500.html {
           root <%= deploy_to %>/current/public;
         }
     }
-    
+
     <% if application_uses_ssl %>
-      
+
     <% if is_using_unicorn %>
     upstream <%= application %>_app_ssl {
       server unix:<%= unicorn_socket %> fail_timeout=0;
-    }  
+    }
     <% end %>
-    
-    # This server is setup for ssl. Uncomment if 
+
+    # This server is setup for ssl. Uncomment if
     # you are using ssl as well as port 80.
     server {
       listen <%= application_port_ssl%>;
@@ -135,7 +114,7 @@
       ssl_certificate_key     /etc/ssl/private/server.key;
       ssl_session_timeout     5m;
       client_max_body_size    50M;
-      
+
       root <%= deploy_to %>/current/public;
       access_log <%= deploy_to %>/current/log/nginx.access.log main;
       error_log  <%= deploy_to %>/current/log/nginx.error.log info;
@@ -153,7 +132,7 @@
         rails_env <%= rails_env %>;
         passenger_enabled on;
         <% end %>
-        
+
         # needed to forward user's IP address to rails
         proxy_set_header  X-Real-IP  $remote_addr;
 
@@ -165,15 +144,15 @@
         proxy_redirect off;
         proxy_max_temp_file_size 0;
 
-        
+
         # If the file exists as a static file serve it directly without
         # running all the other rewite tests on it
-        if (-f $request_filename) { 
-          break; 
+        if (-f $request_filename) {
+          break;
         }
 
         # check for index.html for directory index
-        # if its there on the filesystem then rewite 
+        # if its there on the filesystem then rewite
         # the url to add /index.html to the end of it
         # and then break to send it to the next config rules.
         if (-f $request_filename/index.html) {
@@ -183,14 +162,14 @@
         # this is the meat of the rails page caching config
         # it adds .html to the end of the url and then checks
         # the filesystem for that file. If it exists, then we
-        # rewite the url to have explicit .html on the end 
+        # rewite the url to have explicit .html on the end
         # and then send it on its way to the next config rule.
-        # if there is no file on the fs then it sets all the 
+        # if there is no file on the fs then it sets all the
         # necessary headers and proxies to our upstream mongrels
         if (-f $request_filename.html) {
           rewrite (.*) $1.html break;
         }
-        
+
         <% if is_using_unicorn %>
         if (!-f $request_filename) {
           proxy_pass http://<%= application %>_app_ssl;
@@ -204,4 +183,5 @@
         root   <%= deploy_to %>/current/public;
       }
     }
-    <% end %>  
+    <% end %>
+
