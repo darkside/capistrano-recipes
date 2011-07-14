@@ -7,12 +7,12 @@ Capistrano::Configuration.instance.load do
 
     desc "|capistrano-recipes| Inspect Phusion Passenger's memory usage."
     task :memory, :roles => :app do
-      run "sudo passenger-memory-stats"
+      run "#{sudo} passenger-memory-stats"
     end
         
     desc "|capistrano-recipes| Inspect Phusion Passenger's internal status."
     task :status, :roles => :app do
-      run "sudo passenger-status"
+      run "#{sudo} passenger-status"
     end
   end
 end
