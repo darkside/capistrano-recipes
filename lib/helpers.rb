@@ -2,17 +2,17 @@
 # These are helper methods that will be available to your recipes.
 # =========================================================================
 
-# automatically sets the environment based on presence of 
+# automatically sets the environment based on presence of
 # :stage (multistage gem), :rails_env, or RAILS_ENV variable; otherwise defaults to 'production'
-def environment  
+def environment
   if exists?(:stage)
     stage
   elsif exists?(:rails_env)
-    rails_env  
+    rails_env
   elsif(ENV['RAILS_ENV'])
     ENV['RAILS_ENV']
   else
-    "production"  
+    "production"
   end
 end
 
@@ -66,18 +66,20 @@ end
 # Generates a configuration file parsing through ERB
 # Fetches local file and uploads it to remote_file
 # Make sure your user has the right permissions.
-def generate_config(local_file,remote_file)
+def generate_config(local_file,remote_file,use_sudo=false)
   temp_file = '/tmp/' + File.basename(local_file)
   buffer    = parse_config(local_file)
   File.open(temp_file, 'w+') { |f| f << buffer }
-  upload temp_file, remote_file, :via => :scp
+  upload temp_file, temp_file, :via => :scp
+  run "#{use_sudo ? sudo : ""} mv #{temp_file} #{remote_file}"
   `rm #{temp_file}`
-end 
+end
 
 # =========================================================================
-# Executes a basic rake task. 
+# Executes a basic rake task.
 # Example: run_rake log:clear
 # =========================================================================
 def run_rake(task)
   run "cd #{current_path} && rake #{task} RAILS_ENV=#{environment}"
 end
+

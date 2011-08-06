@@ -20,7 +20,7 @@ Jeweler::Tasks.new do |gem|
   gem.summary =%q{Capistrano recipes}
   gem.description = %q{Extend the Capistrano gem with these useful recipes}
   gem.email = "leonardobighetti@gmail.com"
-  gem.authors = ["Phil Misiowiec", "Leonardo Bighetti"]
+  gem.authors = ["Phil Misiowiec", "Leonardo Bighetti", "Rogerio Augusto"]
   # dependencies defined in Gemfile
 
 end

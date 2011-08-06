@@ -12,7 +12,7 @@
 NAME=god
 DESC=god
 
-GOD_BIN=/usr/local/bin/bootup_god
+GOD_BIN=/usr/local/bin/<%= bin_god %>
 GOD_PID=/var/run/god.pid
 GOD_LOG=/var/log/god.log
 set -e
@@ -60,3 +60,4 @@ case "$1" in
 esac
 
 exit $RETVAL
+

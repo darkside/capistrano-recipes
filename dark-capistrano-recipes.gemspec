@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.version = "0.8.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Phil Misiowiec", "Leonardo Bighetti"]
-  s.date = %q{2011-07-12}
+  s.authors = [%q{Phil Misiowiec}, %q{Leonardo Bighetti}, %q{Rogerio Augusto}]
+  s.date = %q{2011-08-06}
   s.description = %q{Extend the Capistrano gem with these useful recipes}
   s.email = %q{leonardobighetti@gmail.com}
   s.extra_rdoc_files = [
@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
     "dark-capistrano-recipes.gemspec",
     "doc/god/god",
     "doc/god/god.conf",
-    "doc/god/god.init",
+    "doc/god/god.init.erb",
     "doc/nginx/nginx.init",
     "generators/app.god.erb",
     "generators/nginx.conf.erb",
@@ -49,9 +49,9 @@ Gem::Specification.new do |s|
     "lib/recipes/unicorn.rb"
   ]
   s.homepage = %q{http://github.com/darkside/capistrano-recipes}
-  s.licenses = ["MIT"]
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.2}
+  s.licenses = [%q{MIT}]
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.6}
   s.summary = %q{Capistrano recipes}
 
   if s.respond_to? :specification_version then
