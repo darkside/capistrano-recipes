@@ -51,7 +51,7 @@ Capistrano::Configuration.instance.load do
 
     desc "[internal] Cleanup files such as all.css"
     task :cleanup, :roles => :app, :except => { :no_release => true } do
-      run "rm #{current_path}/public/stylesheets/all.css"
+      run "rm -f #{current_path}/public/stylesheets/all.css"
     end
 
     namespace :rollback do
